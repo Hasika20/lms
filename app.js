@@ -1,28 +1,127 @@
 /*eslint-disable no-undef */
 const express = require("express");
-const path = require("path");
 const app = express();
+const path = require("path");
+const bodyParser = require("body-parser");
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const bcrypt = require("bcrypt");
+const flash = require("connect-flash");
 
-// const passport = require("passport");
-// const connnectEnsureLogin = require("connect-ensure-login");
-// const session = require("express-session");
-// const LocalStrategy = require("passport-local");
-// const bcrypt = require("bcrypt");
-// const flash = require("connect-flash");
-
-// const saltRounds = 10;
+const saltRounds = 10;
 
 app.use(express.static(path.join(__dirname, "public")));
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: false }));
-// Serve static files from the 'public' directory
-app.use(express.static("public"));
+app.use(bodyParser.json());
 app.use(flash());
+
+// Configure session middleware
+app.use(
+  session({
+    secret: "my-super-secret-key-23487623476321414726",
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  }),
+);
+
 app.set("view engine", "ejs");
 
+const { Teachers, Students } = require("./models");
+
+// Passport.js setup
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(function (request, response, next) {
+  response.locals.messages = request.flash();
+  next();
+});
+
+// Passport.js LocalStrategy for Teacher login
+passport.use(
+  "teacher-local",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    (email, password, done) => {
+      Teachers.findOne({ where: { email: email } })
+        .then(async (teacher) => {
+          if (!teacher) {
+            return done(null, false, { message: "Teacher not found" });
+          }
+          const result = await bcrypt.compare(password, teacher.password);
+          if (result) {
+            return done(null, teacher);
+          } else {
+            return done(null, false, { message: "Invalid password" });
+          }
+        })
+        .catch((error) => {
+          return done(error);
+        });
+    },
+  ),
+);
+
+// Passport.js LocalStrategy for Student login
+passport.use(
+  "student-local",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    (email, password, done) => {
+      Students.findOne({ where: { email: email } })
+        .then(async (student) => {
+          if (!student) {
+            return done(null, false, { message: "Student not found" });
+          }
+          const result = await bcrypt.compare(password, student.password);
+          if (result) {
+            return done(null, student);
+          } else {
+            return done(null, false, { message: "Invalid password" });
+          }
+        })
+        .catch((error) => {
+          return done(error);
+        });
+    },
+  ),
+);
+
+// Passport.js Serialization and Deserialization
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  Teachers.findByPk(id)
+    .then((teacher) => {
+      if (teacher) {
+        return done(null, teacher);
+      } else {
+        Students.findByPk(id)
+          .then((student) => {
+            done(null, student);
+          })
+          .catch((error) => {
+            done(error);
+          });
+      }
+    })
+    .catch((error) => {
+      done(error);
+    });
+});
+
 // Routes
-app.get("/", async (request, response) => {
-  // for non-logged-in users
+app.get("/", (request, response) => {
   response.render("index", {
     title: "LMS app",
   });
@@ -57,6 +156,8 @@ app.get("/login", (_req, res) => {
 });
 
 app.post("/tusers", async (request, response) => {
+  // Similar to your teacher registration route
+  // You can use passport.authenticate after registration to log in the teacher
   if (request.body.email.length == 0) {
     // request.flash("error", "Email can not be empty!");
     return response.redirect("/edusignup");
@@ -77,16 +178,19 @@ app.post("/tusers", async (request, response) => {
     return response.redirect("/edusignup");
   }
 
+  //hashing the password
+  const hashedPwd = await bcrypt.hash(request.body.password, saltRounds);
+
   //have to create a user
-  console.log(request.user);
+  // console.log(request.user);
   try {
-    const user = await Teachers.create({
+    const teacher = await Teachers.create({
       firstName: request.body.firstName,
       lastName: request.body.lastName,
       email: request.body.email,
-      password: request.body.password,
+      password: hashedPwd,
     });
-    request.login(user, (err) => {
+    request.login(teacher, (err) => {
       if (err) {
         console.log(err);
       }
@@ -98,36 +202,41 @@ app.post("/tusers", async (request, response) => {
 });
 
 app.post("/susers", async (request, response) => {
+  // Similar to your student registration route
+  // You can use passport.authenticate after registration to log in the student
   if (request.body.email.length == 0) {
     // request.flash("error", "Email can not be empty!");
-    return response.redirect("/edusignup");
+    return response.redirect("/stusignup");
   }
 
   if (request.body.firstName.length == 0) {
     // request.flash("error", "First name cannot be empty!");
-    return response.redirect("/edusignup");
+    return response.redirect("/stusignup");
   }
 
   if (request.body.lastName.length == 0) {
     // request.flash("error", "Last name cannot be empty!");
-    return response.redirect("/edusignup");
+    return response.redirect("/stusignup");
   }
 
   if (request.body.password.length < 8) {
     // request.flash("error", "Password must be at least 8 characters");
-    return response.redirect("/edusignup");
+    return response.redirect("/stusignup");
   }
 
+  //hashing the password
+  const hashedPwd = await bcrypt.hash(request.body.password, saltRounds);
+
   //have to create a user
-  console.log(request.user);
+  // console.log(request.user);
   try {
-    const user = await Students.create({
+    const Student = await Students.create({
       firstName: request.body.firstName,
       lastName: request.body.lastName,
       email: request.body.email,
-      password: request.body.password,
+      password: hashedPwd,
     });
-    request.login(user, (err) => {
+    request.login(Student, (err) => {
       if (err) {
         console.log(err);
       }
@@ -138,9 +247,10 @@ app.post("/susers", async (request, response) => {
   }
 });
 
-app.get("/courses", async (request, response) => {
+app.get("/courses", (request, response) => {
   response.render("courses", {
     title: "Courses",
   });
 });
+
 module.exports = app;
