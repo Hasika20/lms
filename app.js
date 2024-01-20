@@ -29,7 +29,7 @@ app.use(
 
 app.set("view engine", "ejs");
 
-const { Teachers, Students } = require("./models");
+const { Teachers, Students, Courses } = require("./models");
 
 // Passport.js setup
 app.use(passport.initialize());
@@ -194,7 +194,7 @@ app.post("/tusers", async (request, response) => {
       if (err) {
         console.log(err);
       }
-      response.redirect("/courses");
+      response.redirect("/teacher-dashboard");
     });
   } catch (error) {
     console.log(error);
@@ -240,7 +240,7 @@ app.post("/susers", async (request, response) => {
       if (err) {
         console.log(err);
       }
-      response.redirect("/courses");
+      response.redirect("/teacher-dashboard");
     });
   } catch (error) {
     console.log(error);
@@ -256,7 +256,7 @@ app.post(
   (request, response) => {
     // Authentication was successful
     // You can now redirect the authenticated educator to their dashboard or another page
-    response.redirect("/courses");
+    response.redirect("/teacher-dashboard");
   },
 );
 
@@ -273,10 +273,51 @@ app.post(
   },
 );
 
-app.get("/courses", (request, response) => {
-  response.render("courses", {
-    title: "Courses",
-  });
+//route to fetch all existing courses
+app.get("/teacher-dashboard", async (request, response) => {
+  try {
+    // Fetch the existing courses from the database
+    const existingCourses = await Courses.findAll();
+    console.log(existingCourses);
+    // response.send(existingCourses);
+
+    // Render the teacher-dashboard page and pass the courses to it
+    response.render("teacher-dashboard", {
+      title: "Teacher Dashboard",
+      courses: existingCourses, // Pass the data as "courses"
+    });
+  } catch (error) {
+    console.error(error);
+    return response.status(422).json(error);
+  }
+});
+
+//route for creating courses
+app.post("/courses", async (request, response) => {
+  // Check if the course fields provided in the request body are not empty
+  if (request.body.courseName.length == 0) {
+    request.flash("error", "Course name cannot be empty!");
+    return response.redirect("/teacher-dashboard"); // You can redirect to the teacher's dashboard
+  }
+
+  if (request.body.courseDescription.length == 0) {
+    request.flash("error", "Description cannot be empty!");
+    return response.redirect("/teacher-dashboard"); // You can redirect to the teacher's dashboard
+  }
+
+  try {
+    // Create a new course and insert it into the database
+    await Courses.create({
+      courseName: request.body.courseName,
+      courseDescription: request.body.courseDescription,
+    });
+
+    // Redirect to the teacher's dashboard or send a response indicating success
+    response.redirect("/teacher-dashboard"); // You can redirect to the teacher's dashboard
+  } catch (error) {
+    console.log(error);
+    return response.status(422).json(error);
+  }
 });
 
 app.get("/student-dashboard", (request, response) => {

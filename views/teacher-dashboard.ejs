@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title> <%=title %></title>
+</head>
+<body>
+    <div class="grid grid-cols-6">
+        <div class="col-start-3 col-span-2">
+            <%- include ('header.ejs') %>
+            <div class="py-4" style="display: flex; justify-content: space-between;">
+                <h1 class="text-black-600 text-xl font-semibold border-b-2 py-2">Welcome</h1>
+                <a href="/tsignout" class="text-green-600 text-xl font-semibold border-b-2 py-2">Signout</a>
+            </div>
+            <!-- Add a form for creating a new course -->
+            <form action="/courses" method="post" autocomplete="on">
+                <div class="flex gap-2 py-4">
+                    <div class="flex-auto">
+                        <input type="text" name="courseName" placeholder="Course Name" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required />
+                    </div>
+                    <div class="flex-auto">
+                        <input type="text" name="courseDescription" placeholder="Course Description" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required />
+                    </div>
+                    <div class="flex-none">
+                        <button type="submit" class="bg-green-600 text-white px-5 py-1.5 rounded font-medium mr-2 mb-2 hover:bg-green-900">Create Course</button>
+                    </div>
+                </div>
+            </form>
+            <!-- Display existing courses -->
+            <div class="py-4">
+                <h2 class="text-2xl font-semibold py-1">Existing Courses:</h2>
+                <ul class="space-y-4">
+                    <% for (let course of courses) { %>
+                    <li>
+                        <a href="/add-chapters/<%= course.id %>" class="block bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-xl font-semibold"><%= course.courseName %></h2>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-600"><%= course.courseDescription %></p>
+                        </a>
+                    </li>
+                    <% } %>
+                </ul>                
+            </div>
+
+            <!-- Add any additional content you need here -->
+            <% if(messages && messages.error && messages.error.length > 0)  { %>
+                <% for(var i=0; i<messages.error.length; i++) { %>
+                    <p class="bg-red-300 my-4 list-none rounded border-gray-50 px-4 py-2"><%= messages.error[i] %></p>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

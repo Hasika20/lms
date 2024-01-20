@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/*eslint-disable no-unused-vars*/
 "use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -12,6 +12,8 @@ module.exports = {
       },
       courseName: {
         type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
       },
       courseDescription: {
         type: Sequelize.TEXT,
@@ -26,7 +28,7 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface) {
+  async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Courses");
   },
 };

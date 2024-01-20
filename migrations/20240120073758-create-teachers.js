@@ -1,3 +1,4 @@
+/*eslint-disable no-unused-vars*/
 "use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -9,14 +10,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      firstname: {
+      firstName: {
         type: Sequelize.STRING,
       },
-      lastname: {
+      lastName: {
         type: Sequelize.STRING,
       },
       email: {
         type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
       },
       password: {
         type: Sequelize.STRING,
@@ -31,7 +34,7 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface) {
+  async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Teachers");
   },
 };
