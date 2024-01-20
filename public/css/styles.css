@@ -1,29 +1,15 @@
-body {
-    margin: 0px;
-    background: white;
-    font-family: "Courier New", Courier, monospace;
-    width: 100vw;
-    height: 100vw;
-    background-color: rgb(247, 221, 136);
-    background-size: 400% 400%;
-    animation: gradient 10s ease infinite;
-    height: 100vh;
+.login-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
   }
   
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-  
-    50% {
-      background-position: 100% 50%;
-    }
-  
-    100% {
-      background-position: 0% 50%;
-    }
+  /* Additional styling for the sections */
+  .educator-login-ask,
+  .student-login-ask {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 3px;
+    text-align: center;
   }
   
-  .Todo-Item:hover .trash-icon {
-    display: block;
-  }

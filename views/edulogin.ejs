@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title> <%= title %></title>
+</head>
+<body>
+    <div class="grid grid-cols-6">
+        <div class="col-start-3 col-span-2">
+            <%- include ('header.ejs') %>
+            <h6 class="py-4 text-xl mb-1">Hey educator! Login to your account</h6>
+            <p class="py-2 text-lg border-b-2 mb-2">Don't have an account? <a href="/edusignup" class="text-green-600 font-semibold hover:underline">Sign-up here</a></p>
+            <form action="/session" method="post" autocomplete="on">
+                <div class="py-3">
+                    <label for="email">Email: </label>
+                    <input type="email" name="email" id="email" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
+                </div>
+                <div class="py-3 relative">
+                    <label for="password">Password: </label>
+                    <input type="password" name="password" id="password" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
+                </div>
+                <div class="py-3">
+                    <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded px-5 py-2">Sign-In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

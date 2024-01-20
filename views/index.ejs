@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <%- include ('header.ejs') %>
+    <div class="login-container">
+      <div class="educator-login-ask">
+        <h1>EDUCATOR</h1>
+        <p>New here..? <a href="/edusignup">Sign-up here</a></p>
+        <p>Already have an account..? <a href="/edulogin">Sign-in</a></p>
+      </div>
+      <div class="student-login-ask">
+        <h1>STUDENT</h1>
+        <p>New here..? <a href="/stusignup">Sign-up here</a></p>
+        <p>Already have an account..? <a href="/stulogin">Sign-in</a></p>
+      </div>
+    </div>
+    <!-- <%- include ('footer.ejs') %> -->
+  </body>
+</html>
