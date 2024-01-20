@@ -10,9 +10,9 @@ const sequelize = new Sequelize(database, username, password, {
 
 const connect = async () => {
   return sequelize.authenticate();
-}
+};
 
 module.exports = {
   connect,
-  sequelize
-}
+  sequelize,
+};

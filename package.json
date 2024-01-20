@@ -4,7 +4,14 @@
   "description": "Learning Management System-LMS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint",
+      "prettier --write ."
+    ]
   },
   "author": "Hasika <hasika20.2005@gmail.com>",
   "license": "ISC",
@@ -19,8 +26,12 @@
     "pg-promise": "^11.5.4"
   },
   "devDependencies": {
+    "eslint": "^8.52.0",
+    "husky": "^8.0.3",
     "jest": "^29.7.0",
+    "lint-staged": "^15.2.0",
     "nodemon": "^3.0.1",
+    "prettier": "^3.2.4",
     "sequelize": "^6.33.0",
     "sequelize-cli": "^6.6.1"
   }
