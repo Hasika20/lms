@@ -20,7 +20,7 @@ app.use(flash());
 // Configure session middleware
 app.use(
   session({
-    secret: "my-super-secret-key-56329802079098291298",
+    secret: "my-super-secret-key-23487623476321414726",
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
     },
@@ -159,22 +159,22 @@ app.post("/tusers", async (request, response) => {
   // Similar to your teacher registration route
   // You can use passport.authenticate after registration to log in the teacher
   if (request.body.email.length == 0) {
-    // request.flash("error", "Email can not be empty!");
+    request.flash("error", "Email can not be empty!");
     return response.redirect("/edusignup");
   }
 
   if (request.body.firstName.length == 0) {
-    // request.flash("error", "First name cannot be empty!");
+    request.flash("error", "First name cannot be empty!");
     return response.redirect("/edusignup");
   }
 
   if (request.body.lastName.length == 0) {
-    // request.flash("error", "Last name cannot be empty!");
+    request.flash("error", "Last name cannot be empty!");
     return response.redirect("/edusignup");
   }
 
   if (request.body.password.length < 8) {
-    // request.flash("error", "Password must be at least 8 characters");
+    request.flash("error", "Password must be at least 8 characters");
     return response.redirect("/edusignup");
   }
 
@@ -205,22 +205,22 @@ app.post("/susers", async (request, response) => {
   // Similar to your student registration route
   // You can use passport.authenticate after registration to log in the student
   if (request.body.email.length == 0) {
-    // request.flash("error", "Email can not be empty!");
+    request.flash("error", "Email can not be empty!");
     return response.redirect("/stusignup");
   }
 
   if (request.body.firstName.length == 0) {
-    // request.flash("error", "First name cannot be empty!");
+    request.flash("error", "First name cannot be empty!");
     return response.redirect("/stusignup");
   }
 
   if (request.body.lastName.length == 0) {
-    // request.flash("error", "Last name cannot be empty!");
+    request.flash("error", "Last name cannot be empty!");
     return response.redirect("/stusignup");
   }
 
   if (request.body.password.length < 8) {
-    // request.flash("error", "Password must be at least 8 characters");
+    request.flash("error", "Password must be at least 8 characters");
     return response.redirect("/stusignup");
   }
 
@@ -247,9 +247,41 @@ app.post("/susers", async (request, response) => {
   }
 });
 
+app.post(
+  "/loggingteacher",
+  passport.authenticate("teacher-local", {
+    failureRedirect: "/edulogin", // Redirect to login page on failure
+    failureFlash: true, // Enable flash messages for failure
+  }),
+  (request, response) => {
+    // Authentication was successful
+    // You can now redirect the authenticated educator to their dashboard or another page
+    response.redirect("/courses");
+  },
+);
+
+app.post(
+  "/loggingstudent",
+  passport.authenticate("student-local", {
+    failureRedirect: "/stulogin", // Redirect to login page on failure
+    failureFlash: true, // Enable flash messages for failure
+  }),
+  (request, response) => {
+    // Authentication was successful
+    // You can now redirect the authenticated educator to their dashboard or another page
+    response.redirect("/student-dashboard");
+  },
+);
+
 app.get("/courses", (request, response) => {
   response.render("courses", {
     title: "Courses",
+  });
+});
+
+app.get("/student-dashboard", (request, response) => {
+  response.render("student-dashboard", {
+    title: "Student Dashboard",
   });
 });
 

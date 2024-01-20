@@ -12,9 +12,9 @@
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include ('header.ejs') %>
-            <h6 class="py-4 text-xl mb-1">Hey educator! Login to your account</h6>
-            <p class="py-2 text-lg border-b-2 mb-2">Don't have an account? <a href="/edusignup" class="text-green-600 font-semibold hover:underline">Sign-up here</a></p>
-            <form action="/session" method="post" autocomplete="on">
+            <h6 class="py-4 text-xl mb-1">Hey educator, Login here!</h6>
+            <p class="py-2 text-lg border-b-2 mb-2">Don't have an account..? <a href="/edusignup" class="text-green-600 font-semibold hover:underline">Sign-up here</a></p>
+            <form action="/loggingteacher" method="post" autocomplete="on">
                 <div class="py-3">
                     <label for="email">Email: </label>
                     <input type="email" name="email" id="email" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
@@ -24,9 +24,14 @@
                     <input type="password" name="password" id="password" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
                 </div>
                 <div class="py-3">
-                    <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded px-5 py-2">Sign-In</button>
+                    <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded px-5 py-2">Sign-In here</button>
                 </div>
             </form>
+            <% if(messages && messages.error && messages.error.length > 0)  { %>
+                <% for(var i=0; i<messages.error.length; i++) { %>
+                  <p class="bg-red-300 my-4 list-none rounded border-gray-50 px-4 py-2"><%= messages.error[i] %></p>
+                <% } %>
+              <% } %>
         </div>
     </div>
 </body>

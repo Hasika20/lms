@@ -14,7 +14,7 @@
             <%- include ('header.ejs') %>
             <h6 class="py-2 text-xl">Signup here as a new student</h6>
             <p class="py-2 text-lg border-b-2 mb-2">Already have an account..? <a href="/stulogin" class="text-green-600 font-semibold hover:underline">Sign-in</a></p>
-            <form action="/users" method="post" autocomplete="on">
+            <form action="/susers" method="post" autocomplete="on">
                 <div class="py-3">
                     <label for="firstName">First Name: </label>
                     <input type="text" name="firstName" id="firstName" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
@@ -35,6 +35,11 @@
                     <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded px-5 py-2">Sign-up</button>
                 </div>
             </form>
+            <% if(messages && messages.error && messages.error.length > 0)  { %>
+                <% for(var i=0; i<messages.error.length; i++) { %>
+                  <p class="bg-red-300 my-4 list-none rounded border-gray-50 px-4 py-2"><%= messages.error[i] %></p>
+                <% } %>
+              <% } %>
         </div>
     </div>
 </body>
