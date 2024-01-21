@@ -32,7 +32,7 @@
             <%- include ('header.ejs') %>
             <div class="py-2 text-sm font-semibold border-b-2" style="display: flex; justify-content: space-between;">
                 <h2 class="text-3xl font-semibold mb-6">View Reports</h2>
-                <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
+                <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> <br> <a href="/signout" class="text-green-600 text-lg font-semibold">Signout</a> </h1>
             </div>
             <a href="/teacher-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
 

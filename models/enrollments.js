@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: DataTypes.INTEGER,
       courseId: DataTypes.INTEGER,
-      noOfChapCompleted: DataTypes.INTEGER,
-      totChapInTheCourse: DataTypes.INTEGER,
+      pageId: DataTypes.INTEGER,
+      completed: DataTypes.BOOLEAN,
     },
     {
       sequelize,

@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>">
-    <!-- <link rel="stylesheet" href="./css/styles.css"> -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/styles.css">
     <title><%= title %></title>
 </head>
 <body>
@@ -15,7 +15,7 @@
             <%- include ('header.ejs') %>
             <div class="py-2 text-sm font-semibold border-b-2" style="display: flex; justify-content: space-between;">
                 <a href="/view-course/<%= course.id %>?currentUserId=<%= currentUser.id %>" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Course</a>
-                <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
+                <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> <br> <a href="/signout" class="text-green-600 text-lg font-semibold">Signout</a> </h1>
             </div>
             <h1 class="text-black-600 text-2xl font-semibold border-b-2 py-2 mb-2">
                 <strong>Course: </strong> <%= course.courseName %> <br>

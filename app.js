@@ -25,7 +25,7 @@ app.use(flash());
 // Configure session middleware
 app.use(
   session({
-    secret: "my-super-secret-key-23487623476321414726",
+    secret: "my-super-secret-key-38920982938602847284",
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
     },
@@ -100,13 +100,20 @@ app.set("view engine", "ejs");
 
 // Routes
 app.get("/", (request, response) => {
+  if (request.isAuthenticated()) {
+    if (request.user.role == "teacher") {
+      return response.redirect("/teacher-dashboard");
+    } else {
+      return response.redirect("/student-dashboard");
+    }
+  }
   response.render("index", {
     title: "LMS app",
     csrfToken: request.csrfToken(),
   });
 });
 
-app.get("/signup", (request, response) => {
+app.get("/signup", async (request, response) => {
   response.render("signup", {
     title: "Signup",
     csrfToken: request.csrfToken(),
@@ -119,10 +126,6 @@ app.get("/login", (request, response) => {
     csrfToken: request.csrfToken(),
   });
 });
-
-// app.get("/login", (_req, res) => {
-//   res.send("Login page here");
-// });
 
 app.post("/users", async (request, response) => {
   // Similar to your student registration route
@@ -456,6 +459,7 @@ app.get(
     const course = await Courses.findByPk(courseId);
     const userOfCourseId = course.userId;
     const userOfCourse = await Users.findByPk(userOfCourseId);
+    const existingEnrollments = await Enrollments.findAll();
 
     const currentUserId = request.query.currentUserId;
     const currentUser = await Users.findByPk(decodeURIComponent(currentUserId));
@@ -469,6 +473,7 @@ app.get(
       pages,
       course,
       userOfCourse,
+      enrols: existingEnrollments,
       currentUser,
       csrfToken: request.csrfToken(),
     });
@@ -609,17 +614,46 @@ app.get(
   },
 );
 
-app.get("/signout", (request, response, next) => {
-  //signout
-  request.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    response.redirect("/");
+//change password routes
+app.get("/changePassword", (request, reponse) => {
+  const currentUser = request.user;
+
+  reponse.render("changePassword", {
+    title: "Change Password",
+    currentUser,
+    csrfToken: request.csrfToken(),
   });
 });
 
-//delete a course
+app.post("/changePassword", async (request, response) => {
+  const userEmail = request.body.email;
+  const newPassword = request.body.password;
+
+  try {
+    // Find the user by email
+    const user = await Users.findOne({ where: { email: userEmail } });
+
+    if (!user) {
+      request.flash("error", "User with that email does not exist.");
+      return response.redirect("/resetpassword");
+    }
+
+    // Hash the new password
+    const hashedPwd = await bcrypt.hash(newPassword, saltRounds);
+
+    // Update the user's password in the database
+    await user.update({ password: hashedPwd });
+
+    // Redirect to a success page or login page
+    return response.redirect("/login");
+  } catch (error) {
+    console.log(error);
+    request.flash("error", "Error updating the password.");
+    return response.redirect("/changePassword");
+  }
+});
+
+//delete a course - not working for now
 app.delete(
   "/courses/:id",
   connnectEnsureLogin.ensureLoggedIn(),
@@ -635,5 +669,15 @@ app.delete(
     }
   },
 );
+
+app.get("/signout", (request, response, next) => {
+  //signout
+  request.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    response.redirect("/");
+  });
+});
 
 module.exports = app;

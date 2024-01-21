@@ -1,14 +1,28 @@
-.login-container {
-  display: flex;
-  justify-content: center; /* Center horizontally */
+body {
+  margin: 0px;
+  /* font-family: "Courier New", Courier, monospace; */
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  width: 100vw;
+  height: 100vw;
+  /* background: linear-gradient(30deg, #f09478, #e980a8, #b67890, #a15b76); */
+  background-color: mintcream;
+  background-size: 400% 400%;
+  animation: gradient 10s ease infinite;
+  /* height: 100vh; */
 }
 
-/* Additional styling for the sections */
+.login-container {
+  display: flex;
+  justify-content: center;
+}
+
 .login-ask {
   background: #f5deb2;
   padding: 20px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 1.2rem;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin: 3px;
-  text-align: center;
+  text-align: justify;
 }

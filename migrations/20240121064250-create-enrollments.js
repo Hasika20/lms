@@ -16,11 +16,11 @@ module.exports = {
       courseId: {
         type: Sequelize.INTEGER,
       },
-      noOfChapCompleted: {
+      pageId: {
         type: Sequelize.INTEGER,
       },
-      totChapInTheCourse: {
-        type: Sequelize.INTEGER,
+      completed: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,

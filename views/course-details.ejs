@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/styles.css"/>
     <title><%= title %></title>
 </head>
 <body>
@@ -14,7 +15,7 @@
             <%- include ('header.ejs') %>
             <div class="py-2 border-b-2 m-2" style="display: flex; justify-content: space-between;">
                 <h2 class="text-2xl font-semibold py-1">Course Details</h2>
-                <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
+                <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> <br> <a href="/signout" class="text-green-600 text-lg font-semibold">Signout</a> </h1>
             </div>
             <% if (currentUser.role === "student") { %>
                 <a href="/student-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2 m-2">Back to Dashboard</a>
@@ -30,7 +31,7 @@
                 <p class="text-xl m-2 px-2">
                     <b>Chapters:</b>
                     <% const isEnrolled = enrols.some(enrollment => enrollment.userId === currentUser.id && enrollment.courseId === course.id); %>
-                    <% if(!isEnrolled) { %>
+                    <% if(!isEnrolled && currentUser.role === "student") { %>
                         <span class="text-lg font-semibold italic px-1 text-red-600 bg-green-200">Enrol to view content</span>
                     <% } %>
                     <!-- List of available chapters for this course -->

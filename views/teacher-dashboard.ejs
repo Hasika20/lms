@@ -7,13 +7,14 @@
     <meta name="csrf-token" content="<%= csrfToken %>">
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/styles.css" />
     <title><%= title %></title>
 </head>
 <body>
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2">
             <%- include ('header.ejs') %>
-            <div class="py-4 flex flex-col ml-6 mr-6 mt-6">
+            <div class="py-4 flex flex-col m-3">
                 <div class="py-2 border-b-2 m-2" style="display: flex; justify-content: space-between;">
                     <h1 class="text-black-600 text-xl font-semibold">Welcome, <br> Educator: <%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
                     <a href="/signout" class="text-green-600 text-xl font-semibold ">Signout</a>
@@ -32,6 +33,11 @@
                     <div class="m-2">
                         <a href="/view-report" class="bg-purple-600 text-white px-5 py-2 rounded font-medium hover:bg-purple-700 text-center block">
                             View Report
+                        </a>
+                    </div>
+                    <div class="m-2">
+                        <a href="/changePassword" class="bg-red-600 text-white px-5 py-2 rounded font-medium hover:bg-red-700 text-center block">
+                            Change Password
                         </a>
                     </div>
                 </div>

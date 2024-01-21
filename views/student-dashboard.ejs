@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/styles.css" />
     <title><%= title %></title>
 </head>
 <body>
@@ -17,7 +18,7 @@
                     <h1 class="text-black-600 text-xl font-semibold">Welcome, <br> Student: <%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
                     <a href="/signout" class="text-green-600 text-xl font-semibold">Signout</a>
                 </div>
-                <div class="border-b-2 m-2">
+                <div class="border-b-2 m-1">
                     <h1 class="text-xl font-bold text-blue-600 m-1">
                         🚀Unlock Your Potential: Your Learning Adventure Begins Here!
                     </h1>
@@ -25,9 +26,12 @@
                         Dive into a world of knowledge. Explore our diverse courses and embark on your journey to success.
                     </p>                
                 </div>
-                <div class="m-2">
+                <div class="m-2 flex flex-row justify-evenly bg-yellow-100">
                     <a href="/MyCourses" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
                         My Enrolled Courses
+                    </a>
+                    <a href="/changePassword" class="bg-red-600 text-white px-5 py-2 rounded font-medium hover:bg-red-700 text-center block">
+                        Change Password
                     </a>
                 </div>
                 <hr class="m-3">
