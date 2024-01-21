@@ -1,0 +1,19 @@
+<!-- Display existing courses -->
+<div class="py-4">
+    <h2 class="text-2xl font-semibold py-1">Existing Courses:</h2>
+    <ul class="space-y-4">
+        <% for (let course of courses) { %>
+        <li>
+            <a href="/add-chapters/<%= course.id %>" class="block bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold"><%= course.courseName %></h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+                <p class="text-gray-600"><%= course.courseDescription %></p>
+            </a>
+        </li>
+        <% } %>
+    </ul>                
+</div>
