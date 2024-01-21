@@ -189,10 +189,6 @@ app.post(
       response.redirect("/student-dashboard");
     } else if (request.user.role === "teacher") {
       response.redirect("/teacher-dashboard");
-      // response.render("teacher-dashboard", {
-      //   title: "Teacher Dashboard",
-      //   user: request.user
-      // });
     } else {
       response.redirect("/login");
     }
@@ -204,6 +200,8 @@ app.get(
   "/teacher-dashboard",
   connnectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
+    const currentUser = request.user;
+
     try {
       // Fetch the existing courses from the database
       const existingCourses = await Courses.findAll();
@@ -213,7 +211,8 @@ app.get(
       // Render the teacher-dashboard page and pass the courses to it
       response.render("teacher-dashboard", {
         title: "Teacher Dashboard",
-        courses: existingCourses, // Pass the data as "courses"
+        courses: existingCourses,
+        currentUser,
       });
     } catch (error) {
       console.error(error);
@@ -222,9 +221,17 @@ app.get(
   },
 );
 
-app.get("/createcourse", connnectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  res.render("createCourse", { title: "Create New Course" });
-});
+app.get(
+  "/createcourse",
+  connnectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const currentUser = await Users.findByPk(request.user.id);
+    response.render("createCourse", {
+      title: "Create New Course",
+      currentUser,
+    });
+  },
+);
 
 //route for creating courses
 app.post(
@@ -232,6 +239,7 @@ app.post(
   connnectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
     // Check if the course fields provided in the request body are not empty
+
     if (request.body.courseName.length == 0) {
       request.flash("error", "Course name cannot be empty!");
       return response.redirect("/teacher-dashboard"); // You can redirect to the teacher's dashboard
@@ -284,7 +292,7 @@ app.get(
       response.render("my-courses", {
         title: "My Courses",
         courses: userCourses,
-        user: currentUser,
+        currentUser,
       });
     } catch (error) {
       console.error(error);
@@ -318,7 +326,7 @@ app.get(
       response.render("viewReport", {
         title: "My Courses Report",
         courses: userCourses,
-        user: currentUser,
+        currentUser,
       });
     } catch (error) {
       console.error(error);
@@ -330,10 +338,16 @@ app.get(
 app.get("/view-course/:id", async (request, response) => {
   try {
     const courseId = request.params.id;
-
+    console.log("course id: ", courseId);
     // Fetch the course details based on the courseId
     const course = await Courses.findByPk(courseId);
-    const user = await Users.findByPk(course.userId);
+    const userofCourse = await Users.findByPk(course.userId);
+
+    const currentUserId = request.query.currentUserId;
+    const currentUser = await Users.findByPk(decodeURIComponent(currentUserId));
+
+    // console.log("Current User id: ", currentUser.id);
+    // console.log("User id: ", userofCourse.id);
 
     // Fetch chapters associated with the course
     const chapters = await Chapters.findAll({ where: { courseId } });
@@ -343,12 +357,14 @@ app.get("/view-course/:id", async (request, response) => {
       return response.status(404).json({ message: "Course not found" });
     }
 
+    // console.log(user)
     // Render the course details template and pass the course details and number of students enrolled to it
     response.render("course-details", {
       title: "Course Details",
       course,
       chapters,
-      user,
+      userofCourse,
+      currentUser,
     });
   } catch (error) {
     console.error(error);
@@ -362,10 +378,18 @@ app.get(
   async (req, res) => {
     const courseId = req.params.id;
     const course = await Courses.findByPk(courseId);
+    const userOfCourseId = course.userId;
+    const userOfCourse = await Users.findByPk(userOfCourseId);
+
+    const currentUserId = req.query.currentUserId;
+    const currentUser = await Users.findByPk(decodeURIComponent(currentUserId));
+
     res.render("createChapter", {
       title: "Create New Chapter",
       courseId,
       course,
+      userOfCourse,
+      currentUser,
     });
   },
 );
@@ -379,12 +403,16 @@ app.post(
     // Check if the course fields provided in the request body are not empty
     if (request.body.chapterName.length == 0) {
       request.flash("error", "Chapter name cannot be empty!");
-      return response.redirect("/view-course/:id");
+      return response.redirect(
+        `/view-course/${request.body.courseId}?currentUserId=${request.query.currentUserId}`,
+      );
     }
 
     if (request.body.chapterDescription.length == 0) {
       request.flash("error", "Description cannot be empty!");
-      return response.redirect("/view-course/:id");
+      return response.redirect(
+        `/view-course/${request.body.courseId}?currentUserId=${request.query.currentUserId}`,
+      );
     }
 
     try {
@@ -395,7 +423,9 @@ app.post(
         courseId,
       });
 
-      response.redirect("/view-course/" + courseId);
+      response.redirect(
+        `/view-course/${request.body.courseId}?currentUserId=${request.query.currentUserId}`,
+      );
     } catch (error) {
       console.log(error);
       return response.status(422).json(error);
@@ -409,6 +439,14 @@ app.get(
   async (req, res) => {
     const chapterId = req.params.id;
     const chapter = await Chapters.findByPk(chapterId);
+    const courseId = chapter.courseId;
+    const course = await Courses.findByPk(courseId);
+    const userOfCourseId = course.userId;
+    const userOfCourse = await Users.findByPk(userOfCourseId);
+
+    const currentUserId = req.query.currentUserId;
+    const currentUser = await Users.findByPk(decodeURIComponent(currentUserId));
+
     const pages = await Pages.findAll({ where: { chapterId } });
 
     res.render("createPage", {
@@ -416,6 +454,9 @@ app.get(
       chapterId,
       chapter,
       pages,
+      course,
+      userOfCourse,
+      currentUser,
     });
   },
 );
@@ -424,16 +465,21 @@ app.post(
   "/view-chapter/:id/createpage",
   connnectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
-    const chapter = await Chapters.findByPk(request.body.chapterId);
+    // const chapter = await Chapters.findByPk(request.body.chapterId);
+
     // Check if the page fields provided in the request body are not empty
     if (request.body.pageName.length == 0) {
       request.flash("error", "Page name cannot be empty!");
-      return response.redirect("/view-chapter/" + request.body.chapterId);
+      return response.redirect(
+        `/view-chapter/${request.body.chapterId}/createpage?currentUserId=${request.query.currentUserId}`,
+      );
     }
 
     if (request.body.pageContent.length == 0) {
       request.flash("error", "Page content cannot be empty!");
-      return response.redirect("/view-chapter/" + request.body.chapterId);
+      return response.redirect(
+        `/view-chapter/${request.body.chapterId}/createpage?currentUserId=${request.query.currentUserId}`,
+      );
     }
 
     try {
@@ -445,7 +491,9 @@ app.post(
       });
 
       // Redirect back to the chapter's view page
-      response.redirect("/view-course/" + chapter.courseId);
+      response.redirect(
+        `/view-chapter/${request.body.chapterId}/createpage?currentUserId=${request.query.currentUserId}`,
+      );
     } catch (error) {
       console.log(error);
       return response.status(422).json(error);

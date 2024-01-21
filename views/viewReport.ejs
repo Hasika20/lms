@@ -12,7 +12,10 @@
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2 p-4 bg-gray-100 rounded-lg shadow-lg">
             <%- include ('header.ejs') %>
-            <h2 class="text-3xl font-semibold mb-6">View Reports</h2>
+            <div class="py-2 text-sm font-semibold border-b-2" style="display: flex; justify-content: space-between;">
+                <h2 class="text-3xl font-semibold mb-6">View Reports</h2>
+                <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
+            </div>
             <a href="/teacher-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
 
             <!-- Number of Courses Created -->

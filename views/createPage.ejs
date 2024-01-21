@@ -12,7 +12,10 @@
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2">
             <%- include ('header.ejs') %>
-            <a href="/view-course/<%= chapter.courseId %>" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Chapter</a>
+            <div class="py-2 text-sm font-semibold border-b-2" style="display: flex; justify-content: space-between;">
+                <a href="/view-course/<%= course.id %>?currentUserId=<%= currentUser.id %>" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Course</a>
+                <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
+            </div>
             <h1 class="text-black-600 text-2xl font-semibold border-b-2 py-2 mb-2">
                 <strong>Chapter: </strong> <%= chapter.chapterName %>
             </h1>
@@ -32,22 +35,24 @@
                         </li>
                     <% } %>
                 <% } %>
-            </ol>            
-            <h1 class="text-black-600 text-2xl font-semibold border-t-2 bg-green-100 border-b-2 py-2 mt-6 mb-2">Create a New Page</h1>
-            <form action="/view-chapter/<%= chapterId %>/createpage" method="post" autocomplete="on" class="m-3">
-                <input type="hidden" name="chapterId" value="<%= chapterId %>">
-                <div class="py-4">
-                    <label for="pageName" class="text-gray-900 text-lg">Page Title:</label>
-                    <input type="text" name="pageName" id="pageName" class="border border-gray-300 rounded p-2 w-full text-gray-900 text-lg" required />
-                </div>
-                <div class="py-4">
-                    <label for="pageContent" class="text-gray-900 text-lg">Page Content:</label>
-                    <textarea name="pageContent" id="pageContent" class="border border-gray-300 rounded p-2 w-full h-32 text-gray-900 text-lg" required></textarea>
-                </div>
-                <div class="py-4">
-                    <button type="submit" class="bg-green-600 text-white px-5 py-2 rounded font-medium hover:bg-green-700">Create Page</button>
-                </div>
-            </form>
+            </ol>
+            <% if(userOfCourse.id === currentUser.id) { %>
+                <h1 class="text-black-600 text-2xl font-semibold border-t-2 bg-green-100 border-b-2 py-2 mt-6 mb-2">Create a New Page</h1>
+                <form action="/view-chapter/<%= chapterId %>/createpage?currentUserId=<%= currentUser.id %>" method="post" autocomplete="on" class="m-3">
+                    <input type="hidden" name="chapterId" value="<%= chapterId %>">
+                    <div class="py-4">
+                        <label for="pageName" class="text-gray-900 text-lg">Page Title:</label>
+                        <input type="text" name="pageName" id="pageName" class="border border-gray-300 rounded p-2 w-full text-gray-900 text-lg" required />
+                    </div>
+                    <div class="py-4">
+                        <label for="pageContent" class="text-gray-900 text-lg">Page Content:</label>
+                        <textarea name="pageContent" id="pageContent" class="border border-gray-300 rounded p-2 w-full h-32 text-gray-900 text-lg" required></textarea>
+                    </div>
+                    <div class="py-4">
+                        <button type="submit" class="bg-green-600 text-white px-5 py-2 rounded font-medium hover:bg-green-700">Create Page</button>
+                    </div>
+                </form>
+            <% } %>
         </div>
     </div>
 </body>

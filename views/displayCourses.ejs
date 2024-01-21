@@ -12,7 +12,7 @@
                         </svg>
                     </div>
                     <!-- <p class="text-gray-600 my-2"><%= course.courseDescription %></p> -->
-                    <a href="/view-course/<%= course.id %>" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mx-2">
+                    <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mx-2">
                         View Course
                     </a>
                     <a href="/enrol-course/<%= course.id %>" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 mx-2">
@@ -22,5 +22,5 @@
             </li>
         </a>
         <% } %>
-    </ul>                
+    </ul>
 </div>
