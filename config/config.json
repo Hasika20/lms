@@ -4,14 +4,16 @@
     "password": "Hasika@2005",
     "database": "lms_dev",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "loggin": false
   },
   "test": {
     "username": "postgres",
     "password": "Hasika@2005",
     "database": "lms_test",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "loggin": false
   },
   "production": {
     "use_evnv_variable": "DATABASE_URL",

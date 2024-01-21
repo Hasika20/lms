@@ -20,7 +20,7 @@ app.use(flash());
 // Configure session middleware
 app.use(
   session({
-    secret: "my-super-secret-key-23487623476321414726",
+    secret: "my-super-secret-key-12345678901234567890",
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
     },
