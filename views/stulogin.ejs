@@ -9,11 +9,11 @@
     <title> <%= title %></title>
 </head>
 <body>
-    <div class="grid grid-cols-6">
-        <div class="col-start-3 col-span-2">
+    <div class="grid grid-cols-4">
+        <div class="col-start-2 col-span-2">
             <%- include ('header.ejs') %>
-            <h6 class="py-4 text-xl mb-1">Hey student, Login here!</h6>
-            <p class="py-2 text-lg border-b-2 mb-2">Don't have an account..? <a href="/stusignup" class="text-green-600 font-semibold hover:underline">Sign-up here</a></p>
+            <h6 class="py-4 text-xl mb-1">Hey student! Login to your account</h6>
+            <p class="py-2 text-lg border-b-2 mb-2">Don't have an account? <a href="/stusignup" class="text-green-600 font-semibold hover:underline">Sign-up here</a></p>
             <form action="/loggingstudent" method="post" autocomplete="on">
                 <div class="py-3">
                     <label for="email">Email: </label>

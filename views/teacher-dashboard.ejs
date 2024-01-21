@@ -6,33 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title> <%= title %></title>
+    <title><%= title %></title>
 </head>
 <body>
-    <div class="grid grid-cols-6">
-        <div class="col-start-3 col-span-2">
+    <div class="grid grid-cols-4">
+        <div class="col-start-2 col-span-2">
             <%- include ('header.ejs') %>
-            <div class="py-4" style="display: flex; justify-content: space-between;">
-                <h1 class="text-black-600 text-xl font-semibold border-b-2 py-2">Welcome</h1>
-                <a href="/tsignout" class="text-green-600 text-xl font-semibold border-b-2 py-2">Signout</a>
-            </div>
-            <!-- Add a form for creating a new course -->
-            <form action="/courses" method="post" autocomplete="on">
-                <div class="flex gap-2 py-4">
-                    <div class="flex-auto">
-                        <input type="text" name="courseName" placeholder="Course Name" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required />
+            <div class="py-4 flex flex-col items-center">
+                <div class="py-4" style="display: flex; justify-content: space-between;">
+                    <h1 class="text-black-600 text-xl font-semibold border-b-2 py-2">Welcome, </h1>
+                    <a href="/signout" class="text-green-600 text-xl font-semibold border-b-2 py-2">Signout</a>
+                </div>
+                <div class="flex flex-row">
+                    <div class="m-2">
+                        <a href="/createcourse" class="bg-green-600 text-white px-5 py-2 rounded font-medium hover:bg-green-700 text-center block">
+                            Create a New Course
+                        </a>
                     </div>
-                    <div class="flex-auto">
-                        <input type="text" name="courseDescription" placeholder="Course Description" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required />
+                    <div class="m-2">
+                        <a href="/my-courses" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
+                            My Courses
+                        </a>
                     </div>
-                    <div class="flex-none">
-                        <button type="submit" class="bg-green-600 text-white px-5 py-1.5 rounded font-medium mr-2 mb-2 hover:bg-green-900">Create Course</button>
+                    <div class="m-2">
+                        <a href="/view-report" class="bg-purple-600 text-white px-5 py-2 rounded font-medium hover:bg-purple-700 text-center block">
+                            View Report
+                        </a>
                     </div>
                 </div>
-            </form>
-            <%= displayCourses.ejs %>
+            </div>
+            
+            <!-- Display existing courses -->
+            <%- include ('displayCourses.ejs') %>
 
-            <!-- Add any additional content you need here -->
             <% if(messages && messages.error && messages.error.length > 0)  { %>
                 <% for(var i=0; i<messages.error.length; i++) { %>
                     <p class="bg-red-300 my-4 list-none rounded border-gray-50 px-4 py-2"><%= messages.error[i] %></p>

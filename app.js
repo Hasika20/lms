@@ -292,8 +292,12 @@ app.get("/teacher-dashboard", async (request, response) => {
   }
 });
 
+app.get("/createcourse", (req, res) => {
+  res.render("createCourse", { title: "Create New Course" });
+});
+
 //route for creating courses
-app.post("/courses", async (request, response) => {
+app.post("/createcourse", async (request, response) => {
   // Check if the course fields provided in the request body are not empty
   if (request.body.courseName.length == 0) {
     request.flash("error", "Course name cannot be empty!");
@@ -313,7 +317,7 @@ app.post("/courses", async (request, response) => {
     });
 
     // Redirect to the teacher's dashboard or send a response indicating success
-    response.redirect("/teacher-dashboard"); // You can redirect to the teacher's dashboard
+    response.redirect("/createcourse"); // You can redirect to the teacher's dashboard
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
