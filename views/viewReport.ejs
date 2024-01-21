@@ -35,21 +35,24 @@
 
             <!-- Number of Courses Created -->
             <div class="bg-white p-4 rounded-lg shadow mt-4 mb-2">
-                <p class="text-xl font-semibold">Total Courses Created: <strong><%= courses.length %></strong></p>
+                <p class="text-xl font-semibold">Total Courses Created - <%= courses.length %></p>
             </div>
 
             <!-- List of All Courses with Enrollment -->
             <div class="mt-8">
-                <p class="text-2xl font-semibold">Courses with Enrollment:</p>
+                <p class="text-2xl font-semibold m-1">Courses with Enrollments by popularity:</p>
                 <ul class="space-y-4">
-                    <% courses.forEach(course => { %>
+                    <% courses.forEach((course, index) => { %>
                         <li>
                             <div class="bg-white p-4 rounded-lg shadow">
-                                <p class="text-xl font-semibold">Course:</p>
-                                <p class="text-2xl font-bold"><%= course.courseName %></p>
-                                <p class="text-xl font-semibold">Students Enrolled: <%= course.enrollmentCount %></p>
+                                <% if (course.enrollmentCount === courses[0].enrollmentCount) { %>
+                                    <p class="text-xl italic text-green-600 underline">Most Popular</p>
+                                <% } %>
+                                <p class="text-2xl font-bold flex justify-between"><%= course.courseName %></p>
+                                <p class="text-xl font-medium">Students Enrolled - <%= course.enrollmentCount %>
+                                </p>
                                 <button
-                                    class="mt-4 px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                                    class="mt-3 px-6 py-2 bg-red-500 text-white rounded hover:bg-red-700"
                                     onclick="deleteCourse(<%= course.id %>)"
                                 >
                                     Delete

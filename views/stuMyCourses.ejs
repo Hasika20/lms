@@ -5,22 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="./css/styles.css" />
     <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <title><%= title %></title>
 </head>
-<body>
+<body class="bg-gray-100">
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2">
             <%- include ('header.ejs') %>
-            <div class="py-2 text-sm font-semibold border-b-2" style="display: flex; justify-content: space-between;">
+            <div class="py-2 text-sm font-semibold border-b-2 flex justify-between items-center">
                 <h2 class="text-2xl font-semibold py-1">My Enrolled Courses:</h2>
                 <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> <br> <a href="/signout" class="text-green-600 text-lg font-semibold">Signout</a> </h1>
             </div> 
-            <a href="/student-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
+            <a href="/student-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2 block hover:underline">Back to Dashboard</a>
             <% if(courses.length === 0) { %>
-                <h2 class="bg-red-300 rounded font-semibold py-1 px-2 m-4">You have not enrolled in any courses.</h2>
+                <div class="bg-red-300 rounded font-semibold py-1 px-2 m-4">You have not enrolled in any courses.</div>
             <% } else { %>
                 <ul class="space-y-4">
                     <% for (let course of courses) { %>
@@ -28,12 +28,23 @@
                             <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
                                 <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
                                     <div class="flex items-center justify-between">
-                                        <h2 class="text-xl font-semibold m-2"><%= course.courseName %></h2>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <h2 class="text-3xl font-bold m-1">
+                                            <%= course.courseName %> 
+                                            <span class="text-green-700 text-2xl block">
+                                                <%= ((course.donePagesCount / course.totalPages) * 100).toFixed(2) %>% Complete
+                                            </span>
+                                        </h2>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 hover:text-gray-700 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                         </svg>
                                     </div>
-                                    <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mx-2">
+                                    <!-- find courseOwner and display his name -->
+                                    <% for(let user of users) { %>
+                                        <% if(user.id === course.userId) { %>
+                                            <h3 class="text-xl font-medium m-1"> by <%= user.firstName %> <%= user.lastName %></h3>
+                                        <% } %>
+                                    <% } %>
+                                    <a href="/view-course/<%= course.courseId %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white text-center px-3 py-1 rounded hover:bg-blue-700 mt-2 block">
                                         View Course
                                     </a>
                                 </div>

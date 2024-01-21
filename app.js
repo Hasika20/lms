@@ -362,6 +362,8 @@ app.get(
       for (const course of userCourses) {
         const enrollmentCount = await Enrollments.count({
           where: { courseId: course.id },
+          distinct: true,
+          col: "userId",
         });
 
         coursesWithEnrollment.push({
@@ -371,10 +373,15 @@ app.get(
         });
       }
 
+      // Sort courses based on enrollment count in descending order for knowing popularity
+      const sortedCourses = coursesWithEnrollment.sort(
+        (a, b) => b.enrollmentCount - a.enrollmentCount,
+      );
+
       // Render the viewReport page and pass the user's courses with enrollment count
       response.render("viewReport", {
         title: `${currentUser.firstName}'s Courses Report`,
-        courses: coursesWithEnrollment,
+        courses: sortedCourses,
         currentUser,
         csrfToken: request.csrfToken(),
       });
@@ -661,16 +668,59 @@ app.get(
         where: { userId: currentUser.id },
       });
 
-      // Fetch information about these courses from the Courses model
-      const courseIds = enrolledCourses.map(
-        (enrollment) => enrollment.courseId,
-      );
-      const courses = await Courses.findAll({ where: { id: courseIds } });
+      const coursesWithPageInfo = [];
+
+      for (const enrollment of enrolledCourses) {
+        // Fetch the course associated with the enrollment
+        const course = await Courses.findByPk(enrollment.courseId, {
+          include: [
+            {
+              model: Chapters,
+              include: [Pages],
+            },
+          ],
+        });
+
+        // Check if the course is already in the array
+        const existingCourse = coursesWithPageInfo.find(
+          (c) => c.courseId === course.id,
+        );
+
+        if (!existingCourse) {
+          // Calculate the total number of pages for the course
+          const totalPages = course.Chapters.reduce(
+            (total, chapter) => total + chapter.Pages.length,
+            0,
+          );
+
+          // Fetch the count of completed pages for the user in this course
+          const donePagesCount = await Enrollments.count({
+            where: {
+              courseId: course.id,
+              userId: currentUser.id,
+              completed: true,
+            },
+          });
+
+          coursesWithPageInfo.push({
+            userId: course.userId,
+            courseId: course.id,
+            courseName: course.courseName,
+            donePagesCount: donePagesCount,
+            totalPages: totalPages,
+          });
+        }
+      }
+
+      console.log(coursesWithPageInfo);
+
+      const existingUsers = await Users.findAll();
 
       // Render the stuMyCourses page and pass the enrolled courses to it
       response.render("stuMyCourses", {
         title: `${currentUser.firstName}'s Enrolled Courses`,
-        courses: courses,
+        courses: coursesWithPageInfo,
+        users: existingUsers,
         currentUser,
         csrfToken: request.csrfToken(),
       });
@@ -689,27 +739,6 @@ app.post("/mark-as-complete", async (request, response) => {
     const chapterId = request.body.chapterId;
     var pageId = parseInt(request.body.pageId) + 1;
 
-    // if (!pageId) {
-    //   pageId = 1;
-    // }
-    // Check if there is an existing enrollment for this user and page
-    // const existingEnrollment = await Enrollments.findOne({
-    //   where: {
-    //     userId,
-    //     courseId,
-    //     chapterId,
-    //     pageId,
-    //   },
-    // });
-
-    // if (existingEnrollment) {
-    //   // Update the 'completed' status to true
-    //   existingEnrollment.chapterId = chapterId;
-    //   existingEnrollment.pageId = pageId;
-    //   existingEnrollment.completed = true;
-    //   await existingEnrollment.save();
-    // } else {
-    // If no existing enrollment for that page, create a new one and set 'completed' to true
     console.log(userId);
     console.log(courseId);
     console.log(chapterId);
@@ -721,7 +750,6 @@ app.post("/mark-as-complete", async (request, response) => {
       pageId,
       completed: true,
     });
-    // }
 
     if (pageId === 1) {
       response.redirect(
