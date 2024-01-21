@@ -25,12 +25,12 @@
                 <ul class="space-y-4">
                     <% for (let course of courses) { %>
                         <li class="m-4">
-                            <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
+                            <a href="/view-course/<%= course.courseId %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
                                 <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
                                     <div class="flex items-center justify-between">
-                                        <h2 class="text-3xl font-bold m-1">
+                                        <h2 class="text-2xl font-bold m-1">
                                             <%= course.courseName %> 
-                                            <span class="text-green-700 text-2xl block">
+                                            <span class="text-green-600 text-xl block">
                                                 <%= ((course.donePagesCount / course.totalPages) * 100).toFixed(2) %>% Complete
                                             </span>
                                         </h2>
@@ -41,7 +41,7 @@
                                     <!-- find courseOwner and display his name -->
                                     <% for(let user of users) { %>
                                         <% if(user.id === course.userId) { %>
-                                            <h3 class="text-xl font-medium m-1"> by <%= user.firstName %> <%= user.lastName %></h3>
+                                            <h3 class="text-lg font-medium m-1"> by <%= user.firstName %> <%= user.lastName %></h3>
                                         <% } %>
                                     <% } %>
                                     <a href="/view-course/<%= course.courseId %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white text-center px-3 py-1 rounded hover:bg-blue-700 mt-2 block">
