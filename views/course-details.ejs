@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title><%= title %></title>
+</head>
+<body>
+    <div class="grid grid-cols-4">
+        <div class="col-start-2 col-span-2">
+            <%- include ('header.ejs') %>
+            <h2 class="text-2xl font-semibold py-1">Course Details</h2>
+            <a href="/teacher-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
+            <div class="bg-white p-4 m-4">
+                <h2 class="text-4xl font-semibold m-2 border-b-2 py-3"><strong><%= course.courseName %></strong></h2>
+                <p class="text-xl m-2"><strong>Created By:</strong></p>
+                <p class="text-xl m-2"><strong>Description:</strong> <%= course.courseDescription %></p>
+                <p class="text-xl m-2"><strong>Chapters:</strong></p>
+                <!-- start from here tomorrow -->
+                <a href="createChapter" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
+                    Create a New Course
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

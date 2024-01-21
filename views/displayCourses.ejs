@@ -2,8 +2,8 @@
     <h2 class="text-2xl font-semibold py-1">Available Courses:</h2>
     <ul class="space-y-4">
         <% for (let course of courses) { %>
-        <li>
-            <a href="">
+        <a href="/view-course/<%= course.id %>">
+            <li>
                 <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
                     <div class="flex items-center justify-between">
                         <h2 class="text-xl font-semibold m-2"><%= course.courseName %></h2>
@@ -16,11 +16,11 @@
                         View Course
                     </a>
                     <a href="/enrol-course/<%= course.id %>" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 mx-2">
-                        Enroll
+                        Enrol
                     </a>
                 </div>
-            </a>
-        </li>
+            </li>
+        </a>
         <% } %>
     </ul>                
 </div>

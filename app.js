@@ -21,7 +21,7 @@ app.use(flash());
 // Configure session middleware
 app.use(
   session({
-    secret: "my-super-secret-key-23487623476321414726",
+    secret: "my-super-secret-key-28368208472610947625",
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
     },
@@ -247,7 +247,7 @@ app.post(
       });
 
       // Redirect to the teacher's dashboard or send a response indicating success
-      response.redirect("/createcourse"); // You can redirect to the teacher's dashboard
+      response.redirect("/teacher-dashboard"); // You can redirect to the teacher's dashboard
     } catch (error) {
       console.log(error);
       return response.status(422).json(error);
@@ -285,6 +285,60 @@ app.get(
     } catch (error) {
       console.error(error);
       return response.status(500).json({ message: "Internal server error" });
+    }
+  },
+);
+
+app.get("/view-course/:id", async (request, response) => {
+  try {
+    const courseId = request.params.id;
+
+    // Fetch the course details based on the courseId
+    const course = await Courses.findByPk(courseId);
+
+    if (!course) {
+      // Handle cases where the course is not found
+      return response.status(404).json({ message: "Course not found" });
+    }
+
+    // Render the course details template and pass the course details and number of students enrolled to it
+    response.render("course-details", {
+      title: "Course Details",
+      course,
+    });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post(
+  "/createchapter",
+  connnectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    // Check if the course fields provided in the request body are not empty
+    if (request.body.courseName.length == 0) {
+      request.flash("error", "Chapter name cannot be empty!");
+      return response.redirect("/createchapter"); // You can redirect to the teacher's dashboard
+    }
+
+    if (request.body.courseDescription.length == 0) {
+      request.flash("error", "Description cannot be empty!");
+      return response.redirect("/createchapter"); // You can redirect to the teacher's dashboard
+    }
+
+    try {
+      // Create a new course and insert it into the database
+      await Chapters.create({
+        chapterName: request.body.chapterName,
+        chapterDescription: request.body.chapterDescription,
+      });
+
+      // Redirect to the teacher's dashboard or send a response indicating success
+      response.redirect("/view-course/:id"); // You can redirect to the teacher's dashboard
+    } catch (error) {
+      console.log(error);
+      return response.status(422).json(error);
     }
   },
 );
