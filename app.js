@@ -357,9 +357,7 @@ app.get("/view-course/:id", async (request, response) => {
 
     const currentUserId = request.query.currentUserId;
     const currentUser = await Users.findByPk(decodeURIComponent(currentUserId));
-
-    // console.log("Current User id: ", currentUser.id);
-    // console.log("User id: ", userofCourse.id);
+    const existingEnrollments = await Enrollments.findAll();
 
     // Fetch chapters associated with the course
     const chapters = await Chapters.findAll({ where: { courseId } });
@@ -376,6 +374,7 @@ app.get("/view-course/:id", async (request, response) => {
       course,
       chapters,
       userofCourse,
+      enrols: existingEnrollments,
       currentUser,
       csrfToken: request.csrfToken(),
     });

@@ -29,19 +29,35 @@
                 <p class="text-xl m-2 px-2"><strong>Description:</strong> <%= course.courseDescription %></p>
                 <p class="text-xl m-2 px-2">
                     <b>Chapters:</b>
+                    <% const isEnrolled = enrols.some(enrollment => enrollment.userId === currentUser.id && enrollment.courseId === course.id); %>
+                    <% if(!isEnrolled) { %>
+                        <span class="text-lg font-semibold italic px-1 text-red-600 bg-green-200">Enrol to view content</span>
+                    <% } %>
                     <!-- List of available chapters for this course -->
                     <ol class="list-decimal text-lg ml-10 mb-2">
                         <% if (chapters.length === 0) { %>
-                            <h3 class="mb-5 text-xl text-gray-600">---No Chapters available. Create one?</h3>
+                            <h3 class="mb-5 text-xl text-gray-600">---No Chapters available</h3>
                         <% } else { %>
-                        <% for (let chapter of chapters) { %>
-                            <li class="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
-                                <a href="/view-chapter/<%= chapter.id %>/createpage?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
-                                    <%= chapter.chapterName %>
-                                </a>
-                            </li>
+                            <% for (let chapter of chapters) { %>
+                                <li class="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                                    <!-- Check the user's role and enrollment status -->
+                                    <% if (currentUser.role === "teacher") { %>
+                                        <a href="/view-chapter/<%= chapter.id %>/createpage?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
+                                            <%= chapter.chapterName %>
+                                        </a>
+                                    <% } else if (currentUser.role === "student") { %>
+                                        <!-- Check if the student is enrolled -->
+                                        <% if (isEnrolled) { %>
+                                            <a href="/view-chapter/<%= chapter.id %>/createpage?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
+                                                <%= chapter.chapterName %>
+                                            </a>
+                                        <% } else { %>
+                                            <%= chapter.chapterName %>
+                                        <% } %>
+                                    <% } %>
+                                </li>
+                            <% } %>
                         <% } %>
-                    <% } %>
                     </ol>
                 </p>
                 
