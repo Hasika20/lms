@@ -49,7 +49,10 @@
                                     <% } else if (currentUser.role === "student") { %>
                                         <!-- Check if the student is enrolled -->
                                         <% if (isEnrolled) { %>
-                                            <a href="/view-chapter/<%= chapter.id %>/createpage?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
+                                            <!-- <a href="/view-chapter/<%= chapter.id %>/createpage?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
+                                                <%= chapter.chapterName %>
+                                            </a> -->
+                                            <a href="/view-chapter/<%= chapter.id %>/viewpage?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
                                                 <%= chapter.chapterName %>
                                             </a>
                                         <% } else { %>

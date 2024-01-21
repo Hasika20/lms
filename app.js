@@ -25,7 +25,7 @@ app.use(flash());
 // Configure session middleware
 app.use(
   session({
-    secret: "my-super-secret-key-38920982938602847284",
+    secret: "my-super-secret-key-83929372983691829237",
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
     },
@@ -217,6 +217,25 @@ app.get(
       const existingUsers = await Users.findAll();
       const existingEnrollments = await Enrollments.findAll();
 
+      // Retrieve courses associated with the user
+      const userCourses = await currentUser.getCourses();
+
+      // Create an array to hold course details including enrollment count
+      const coursesWithEnrollment = [];
+
+      // Loop through each course to fetch enrollment count
+      for (const course of userCourses) {
+        const enrollmentCount = await Enrollments.count({
+          where: { courseId: course.id },
+        });
+
+        coursesWithEnrollment.push({
+          id: course.id,
+          courseName: course.courseName,
+          enrollmentCount: enrollmentCount,
+        });
+      }
+
       // Render the teacher-dashboard page and pass the courses to it
       response.render("teacher-dashboard", {
         title: `${currentUser.firstName} teacher Dashboard`,
@@ -336,10 +355,26 @@ app.get(
       // Retrieve courses associated with the user
       const userCourses = await currentUser.getCourses();
 
-      // Render the my-courses page and pass the user's courses to it
+      // Create an array to hold course details including enrollment count
+      const coursesWithEnrollment = [];
+
+      // Loop through each course to fetch enrollment count
+      for (const course of userCourses) {
+        const enrollmentCount = await Enrollments.count({
+          where: { courseId: course.id },
+        });
+
+        coursesWithEnrollment.push({
+          id: course.id,
+          courseName: course.courseName,
+          enrollmentCount: enrollmentCount,
+        });
+      }
+
+      // Render the viewReport page and pass the user's courses with enrollment count
       response.render("viewReport", {
         title: `${currentUser.firstName}'s Courses Report`,
-        courses: userCourses,
+        courses: coursesWithEnrollment,
         currentUser,
         csrfToken: request.csrfToken(),
       });
@@ -467,7 +502,7 @@ app.get(
     const pages = await Pages.findAll({ where: { chapterId } });
 
     response.render("createPage", {
-      title: "Create New Page",
+      title: "Pages",
       chapterId,
       chapter,
       pages,
@@ -475,6 +510,40 @@ app.get(
       userOfCourse,
       enrols: existingEnrollments,
       currentUser,
+      csrfToken: request.csrfToken(),
+    });
+  },
+);
+
+//route for onlyy enrolled students
+app.get(
+  "/view-chapter/:id/viewpage",
+  connnectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const chapterId = request.params.id;
+    const chapter = await Chapters.findByPk(chapterId);
+    const courseId = chapter.courseId;
+    const course = await Courses.findByPk(courseId);
+    const userOfCourseId = course.userId;
+    const userOfCourse = await Users.findByPk(userOfCourseId);
+    const existingEnrollments = await Enrollments.findAll();
+
+    const currentUserId = request.query.currentUserId;
+    const currentUser = await Users.findByPk(decodeURIComponent(currentUserId));
+    const currentPageIndex = request.query.currentPageIndex || 0; // Get currentPageIndex from the query parameter or set it to 0 by default
+
+    const pages = await Pages.findAll({ where: { chapterId } });
+
+    response.render("enrolledStuViewPage", {
+      title: "Pages",
+      chapterId,
+      chapter,
+      pages,
+      course,
+      userOfCourse,
+      enrols: existingEnrollments,
+      currentUser,
+      currentPageIndex,
       csrfToken: request.csrfToken(),
     });
   },
@@ -534,7 +603,7 @@ app.get(
 
       // Render the teacher-dashboard page and pass the courses to it
       response.render("student-dashboard", {
-        title: "Student Dashboard",
+        title: `Student ${currentUser.firstName} Dashboard`,
         courses: existingCourses,
         users: existingUsers,
         enrols: existingEnrollments,
@@ -573,8 +642,6 @@ app.post(
     await Enrollments.create({
       userId: currentUserId,
       courseId,
-      noOfChapCompleted: 0,
-      totChapInTheCourse: 0,
     });
 
     response.redirect("/student-dashboard");
@@ -614,42 +681,57 @@ app.get(
   },
 );
 
-//change password routes
-app.get("/changePassword", (request, reponse) => {
-  const currentUser = request.user;
-
-  reponse.render("changePassword", {
-    title: "Change Password",
-    currentUser,
-    csrfToken: request.csrfToken(),
-  });
-});
-
-app.post("/changePassword", async (request, response) => {
-  const userEmail = request.body.email;
-  const newPassword = request.body.password;
-
+app.post("/mark-as-complete", async (request, response) => {
   try {
-    // Find the user by email
-    const user = await Users.findOne({ where: { email: userEmail } });
+    const userId = request.query.currentUserId;
+    const courseId = request.query.currentCourseId;
+    var pageId = request.query.currentPageIndex;
+    const chapterId = request.query.currentChapterId;
 
-    if (!user) {
-      request.flash("error", "User with that email does not exist.");
-      return response.redirect("/resetpassword");
+    if (!pageId) {
+      pageId = 1;
+    }
+    // Check if there is an existing enrollment for this user and page
+    const existingEnrollment = await Enrollments.findOne({
+      where: {
+        userId,
+        courseId,
+        chapterId,
+        pageId,
+      },
+    });
+
+    if (existingEnrollment) {
+      // Update the 'completed' status to true
+      existingEnrollment.chapterId = chapterId;
+      existingEnrollment.pageId = pageId;
+      existingEnrollment.completed = true;
+      await existingEnrollment.save();
+    } else {
+      // If no existing enrollment for that page, create a new one and set 'completed' to true
+      await Enrollments.create({
+        userId,
+        courseId,
+        chapterId,
+        pageId,
+        completed: true,
+      });
     }
 
-    // Hash the new password
-    const hashedPwd = await bcrypt.hash(newPassword, saltRounds);
-
-    // Update the user's password in the database
-    await user.update({ password: hashedPwd });
-
-    // Redirect to a success page or login page
-    return response.redirect("/login");
+    if (pageId == 1) {
+      response.redirect(
+        `/view-chapter/${chapterId}/viewpage?currentUserId=${userId}`,
+      );
+    } else {
+      response.redirect(
+        `/view-chapter/${chapterId}/viewpage?currentUserId=${userId}&currentPageIndex=${pageId}`,
+      );
+    }
   } catch (error) {
-    console.log(error);
-    request.flash("error", "Error updating the password.");
-    return response.redirect("/changePassword");
+    console.error("Error marking page as complete", error);
+    response
+      .status(500)
+      .send("An error occurred while marking the page as complete");
   }
 });
 

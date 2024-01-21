@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: DataTypes.INTEGER,
       courseId: DataTypes.INTEGER,
+      chapterId: DataTypes.INTEGER,
       pageId: DataTypes.INTEGER,
       completed: DataTypes.BOOLEAN,
     },
