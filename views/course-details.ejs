@@ -16,13 +16,20 @@
             <a href="/teacher-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
             <div class="bg-white p-4 m-4">
                 <h2 class="text-4xl font-semibold m-2 border-b-2 py-3"><strong><%= course.courseName %></strong></h2>
+                <p class="text-xl m-2"><strong>Course ID: <%= course.id %></strong></p>
                 <p class="text-xl m-2"><strong>Created By:</strong></p>
                 <p class="text-xl m-2"><strong>Description:</strong> <%= course.courseDescription %></p>
-                <p class="text-xl m-2"><strong>Chapters:</strong></p>
-                <!-- start from here tomorrow -->
-                <a href="createChapter" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
-                    Create a New Course
-                </a>
+                <p class="text-xl m-2"><strong>Chapters:</strong>
+                    <!-- list of available chapters for this course as dropdown -->
+                    <select class="border border-gray-300 rounded p-2 mt-2 mb-2 text-gray-900 text-lg" name="chapterId">
+                        <% for (let chapter of chapters) { %>
+                            <option value="<%= chapter.id %>"><%= chapter.chapterName %></option>
+                        <% } %>
+                    </select>
+                    <a href="/view-course/<%= course.id %>/createchapter" class="bg-blue-600 text-white px-4 py-2 rounded font-xl hover:bg-blue-700 text-center">
+                        Create a New Chapter
+                    </a>
+                </p>
             </div>
         </div>
     </div>

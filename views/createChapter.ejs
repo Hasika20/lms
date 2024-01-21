@@ -1,14 +1,35 @@
-<h1 class="text-black-600 text-2xl font-semibold border-b-2 py-2 mb-2">Create a New Chapter</h1>
-<form action="/view-course/<%= course.id %>/createchapter" method="post" autocomplete="on">
-    <div class="py-4">
-        <label for="chapterName" class="text-gray-900 text-lg">Chapter Name:</label>
-        <input type="text" name="chapterName" id="chapterName" class="border border-gray-300 rounded p-2 w-full text-gray-900 text-lg" required />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title><%= title %></title>
+</head>
+<body>
+    <div class="grid grid-cols-4">
+        <div class="col-start-2 col-span-2">
+            <%- include ('header.ejs') %>
+            <a href="/view-course/<%= courseId %>" class="text-blue-600 text-sm font-semibold border-b-2 py-2 ">Back to Course</a>
+            <h1 class="text-black-600 text-2xl font-semibold border-b-2 py-2 mb-2"><strong>Course: </strong> <%= course.courseName %></h1>
+            <h1 class="text-black-600 text-2xl font-semibold border-b-2 py-2 mb-2">Create a New Chapter</h1>
+            <form action="/view-course/<%= courseId %>/createchapter" method="post" autocomplete="on">
+                <input type="hidden" name="courseId" value="<%= courseId %>">
+                <div class="py-4">
+                    <label for="chapterName" class="text-gray-900 text-lg">Chapter Name:</label>
+                    <input type="text" name="chapterName" id="chapterName" class="border border-gray-300 rounded p-2 w-full text-gray-900 text-lg" required />
+                </div>
+                <div class="py-4">
+                    <label for="chapterDescription" class="text-gray-900 text-lg">Chapter Description:</label>
+                    <textarea name="chapterDescription" id="chapterDescription" class="border border-gray-300 rounded p-2 w-full h-36 text-gray-900 text-lg" required></textarea>
+                </div>
+                <div class="py-4">
+                    <button type="submit" class="bg-green-600 text-white px-5 py-2 rounded font-medium hover:bg-green-700">Create Chapter</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="py-4">
-        <label for="chapterDescription" class="text-gray-900 text-lg">Chapter Description:</label>
-        <textarea name="chapterDescription" id="chapterDescription" class="border border-gray-300 rounded p-2 w-full h-36 text-gray-900 text-lg" required></textarea>
-    </div>
-    <div class="py-4">
-        <button type="submit" class="bg-green-600 text-white px-5 py-2 rounded font-medium hover:bg-green-700">Create Course</button>
-    </div>
-</form>
+</body>
+</html>
