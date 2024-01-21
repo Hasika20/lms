@@ -1,4 +1,47 @@
-<div class="py-4" style="display: flex; justify-content: space-between;">
-    <h1 class="text-black-600 text-xl font-semibold border-b-2 py-2">Welcome, </h1>
-    <a href="/signout" class="text-green-600 text-xl font-semibold border-b-2 py-2">Signout</a>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title><%= title %></title>
+</head>
+<body>
+    <div class="grid grid-cols-4">
+        <div class="col-start-2 col-span-2">
+            <%- include ('header.ejs') %>
+            <div class="py-4 flex flex-col ml-6 mr-6 mt-3">
+                <div class="py-2 border-b-2 m-2" style="display: flex; justify-content: space-between;">
+                    <h1 class="text-black-600 text-xl font-semibold">Welcome, <br> Student: <%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
+                    <a href="/signout" class="text-green-600 text-xl font-semibold">Signout</a>
+                </div>
+                <div class="border-b-2 m-2">
+                    <h1 class="text-xl font-bold text-blue-600 m-1">
+                        🚀Unlock Your Potential: Your Learning Adventure Begins Here!
+                    </h1>
+                    <p class="text-medium text-gray-700 m-2">
+                        Dive into a world of knowledge. Explore our diverse courses and embark on your journey to success.
+                    </p>                
+                </div>
+                <div class="m-2">
+                    <a href="/my-courses" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
+                        My Enrolled Courses
+                    </a>
+                </div>
+                <hr class="m-3">
+            </div>
+            
+            <!-- Display enrolled courses -->
+            <%- include ('displayCourses.ejs', { currentUser }) %>
+
+            <% if(messages && messages.error && messages.error.length > 0)  { %>
+                <% for(var i=0; i<messages.error.length; i++) { %>
+                    <p class="bg-red-300 my-4 list-none rounded border-gray-50 px-4 py-2"><%= messages.error[i] %></p>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

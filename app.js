@@ -195,7 +195,6 @@ app.post(
   },
 );
 
-//route to fetch all existing courses
 app.get(
   "/teacher-dashboard",
   connnectEnsureLogin.ensureLoggedIn(),
@@ -205,7 +204,7 @@ app.get(
     try {
       // Fetch the existing courses from the database
       const existingCourses = await Courses.findAll();
-      console.log(existingCourses);
+      // console.log(existingCourses);
       // response.send(existingCourses);
 
       // Render the teacher-dashboard page and pass the courses to it
@@ -504,10 +503,25 @@ app.post(
 app.get(
   "/student-dashboard",
   connnectEnsureLogin.ensureLoggedIn(),
-  (request, response) => {
-    response.render("student-dashboard", {
-      title: "Student Dashboard",
-    });
+  async (request, response) => {
+    const currentUser = request.user;
+
+    try {
+      // Fetch the existing courses from the database
+      const existingCourses = await Courses.findAll();
+      // console.log(existingCourses);
+      // response.send(existingCourses);
+
+      // Render the teacher-dashboard page and pass the courses to it
+      response.render("student-dashboard", {
+        title: "Student Dashboard",
+        courses: existingCourses,
+        currentUser,
+      });
+    } catch (error) {
+      console.error(error);
+      return response.status(422).json(error);
+    }
   },
 );
 
