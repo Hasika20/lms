@@ -4,9 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <!-- Add Tailwind CSS CDN or include your custom styles -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title><%= title %></title>
+    <script>
+        function deleteCourse(courseId) {
+            var token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+            fetch(`/courses/${courseId}`, {
+                method: "delete",
+                headers: { "Content-type": "application/json", "_csrf":token},
+                // body: JSON.stringify({
+                //     "_csrf":token
+                // })
+            })
+            .then((res) => {
+                if(res.ok) {
+                    window.location.reload()
+                }
+            }).catch((error) => console.error(error))
+        }
+    </script>
 </head>
 <body>
     <div class="grid grid-cols-4">
@@ -36,7 +54,7 @@
                                 <p class="text-2xl font-bold"><%= course.enrollmentCount %></p>
                                 <button
                                     class="mt-4 px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                                    onclick="deleteCourse('<%= course.id %>')"
+                                    onclick="deleteCourse(<%= course.id %>)"
                                 >
                                     Delete
                                 </button>
@@ -47,13 +65,5 @@
             </div>
         </div>
     </div>
-
-    <!-- JavaScript Function to Delete a Course -->
-    <script>
-        function deleteCourse(courseId) {
-            // Implement course deletion logic here (e.g., an AJAX request to the server).
-            // After successful deletion, you can refresh the page or update the list.
-        }
-    </script>
 </body>
 </html>

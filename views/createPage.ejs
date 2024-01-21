@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <!-- <link rel="stylesheet" href="./css/styles.css"> -->
     <script src="https://cdn.tailwindcss.com"></script>
     <title><%= title %></title>
@@ -22,7 +23,7 @@
             <!-- Available pages -->
             <ol class="space-y-4 list-decimal m-4">
                 <% if (pages.length === 0) { %>
-                    <h3 class="mb-5 text-2xl text-gray-600">---No pages available</h3>
+                    <h3 class="mb-5 text-2xl text-gray-600">---No pages available. Create one?</h3>
                 <% } else { %>
                     <% for (let page of pages) { %>
                         <li class="mb-5">
@@ -39,6 +40,7 @@
             <% if(userOfCourse.id === currentUser.id) { %>
                 <h1 class="text-black-600 text-2xl font-semibold border-t-2 bg-green-100 border-b-2 py-2 mt-6 mb-2">Create a New Page</h1>
                 <form action="/view-chapter/<%= chapterId %>/createpage?currentUserId=<%= currentUser.id %>" method="post" autocomplete="on" class="m-3">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <input type="hidden" name="chapterId" value="<%= chapterId %>">
                     <div class="py-4">
                         <label for="pageName" class="text-gray-900 text-lg">Page Title:</label>

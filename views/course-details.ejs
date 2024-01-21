@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <script src="https://cdn.tailwindcss.com"></script>
     <title><%= title %></title>
 </head>
@@ -15,7 +16,11 @@
                 <h2 class="text-2xl font-semibold py-1">Course Details</h2>
                 <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
             </div>
-            <a href="/teacher-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
+            <% if (currentUser.role === "student") { %>
+                <a href="/student-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
+            <% } else { %>
+                <a href="/teacher-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
+            <% } %>
             <div class="bg-white p-4 m-4">
                 <h2 class="text-4xl font-semibold m-2 border-b-2 p-3 bg-blue-100"><strong><%= course.courseName %></strong></h2>
                 <p class="text-xl m-2 px-2"><strong>Course ID: <%= course.id %></strong></p>
@@ -27,7 +32,7 @@
                     <!-- List of available chapters for this course -->
                     <ol class="list-decimal text-lg ml-10 mb-2">
                         <% if (chapters.length === 0) { %>
-                            <h3 class="mb-5 text-xl text-gray-600">---No Chapters available</h3>
+                            <h3 class="mb-5 text-xl text-gray-600">---No Chapters available. Create one?</h3>
                         <% } else { %>
                         <% for (let chapter of chapters) { %>
                             <li class="text-blue-600 hover:text-blue-800 hover:underline transition-colors">

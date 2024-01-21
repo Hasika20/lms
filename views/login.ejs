@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <title> <%= title %></title>
@@ -15,6 +16,7 @@
             <h6 class="bg-blue-100 py-4 text-xl mb-1">Hey User! Login to your account</h6>
             <p class="py-2 text-lg border-b-2 mb-2">Don't have an account? <a href="/signup" class="text-green-600 font-semibold hover:underline">Sign-up here</a></p>
             <form action="/logging" method="post" autocomplete="on">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="py-3">
                     <label for="email">Email: </label>
                     <input type="email" name="email" id="email" class="border border-gray-300 text-gray-900 rounded p-2 w-full">

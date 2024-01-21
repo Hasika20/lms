@@ -6,11 +6,17 @@
             <li>
                 <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
                     <div class="flex items-center justify-between">
-                        <h2 class="text-xl font-semibold m-2"><%= course.courseName %></h2>
+                        <h2 class="text-2xl font-bold m-1"><%= course.courseName %></h2>
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </div>
+                    <!-- find courseOwner and display his name -->
+                    <% for(let user of users) { %>
+                        <% if(user.id === course.userId) { %>
+                            <h3 class="text-lg font-semibold ml-3 mt-2 mb-3"> by <%= user.firstName %> <%= user.lastName %></h3>
+                        <% } %>
+                    <% } %>
                     <!-- <p class="text-gray-600 my-2"><%= course.courseDescription %></p> -->
                     <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mx-2">
                         View Course
