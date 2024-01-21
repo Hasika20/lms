@@ -28,7 +28,7 @@ app.use(
   }),
 );
 
-const { Users, Courses, Chapters } = require("./models");
+const { Users, Courses, Chapters, Pages } = require("./models");
 
 // Passport.js setup
 app.use(passport.initialize());
@@ -113,9 +113,9 @@ app.get("/login", (_request, response) => {
   });
 });
 
-app.get("/login", (_req, res) => {
-  res.send("Login page here");
-});
+// app.get("/login", (_req, res) => {
+//   res.send("Login page here");
+// });
 
 app.post("/users", async (request, response) => {
   // Similar to your student registration route
@@ -189,6 +189,10 @@ app.post(
       response.redirect("/student-dashboard");
     } else if (request.user.role === "teacher") {
       response.redirect("/teacher-dashboard");
+      // response.render("teacher-dashboard", {
+      //   title: "Teacher Dashboard",
+      //   user: request.user
+      // });
     } else {
       response.redirect("/login");
     }
@@ -289,12 +293,47 @@ app.get(
   },
 );
 
+app.get(
+  "/view-report",
+  connnectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    if (!request.isAuthenticated()) {
+      // Ensure the user is authenticated
+      return response.redirect("/login");
+    }
+
+    try {
+      // Retrieve the currently logged-in user
+      const currentUser = request.user;
+
+      if (!currentUser) {
+        // Handle cases where the user is not found
+        return response.status(404).json({ message: "User not found" });
+      }
+
+      // Retrieve courses associated with the user
+      const userCourses = await currentUser.getCourses();
+
+      // Render the my-courses page and pass the user's courses to it
+      response.render("viewReport", {
+        title: "My Courses Report",
+        courses: userCourses,
+        user: currentUser,
+      });
+    } catch (error) {
+      console.error(error);
+      return response.status(500).json({ message: "Internal server error" });
+    }
+  },
+);
+
 app.get("/view-course/:id", async (request, response) => {
   try {
     const courseId = request.params.id;
 
     // Fetch the course details based on the courseId
     const course = await Courses.findByPk(courseId);
+    const user = await Users.findByPk(course.userId);
 
     // Fetch chapters associated with the course
     const chapters = await Chapters.findAll({ where: { courseId } });
@@ -309,43 +348,13 @@ app.get("/view-course/:id", async (request, response) => {
       title: "Course Details",
       course,
       chapters,
+      user,
     });
   } catch (error) {
     console.error(error);
     return response.status(500).json({ message: "Internal server error" });
   }
 });
-
-app.post(
-  "/createchapter",
-  connnectEnsureLogin.ensureLoggedIn(),
-  async (request, response) => {
-    // Check if the course fields provided in the request body are not empty
-    if (request.body.chapterName.length == 0) {
-      request.flash("error", "Chapter name cannot be empty!");
-      return response.redirect("/createchapter");
-    }
-
-    if (request.body.chapterDescription.length == 0) {
-      request.flash("error", "Description cannot be empty!");
-      return response.redirect("/createchapter");
-    }
-
-    try {
-      // Create a new course and insert it into the database
-      await Chapters.create({
-        chapterName: request.body.chapterName,
-        chapterDescription: request.body.chapterDescription,
-      });
-
-      // Redirect to the course's dashboard or send a response indicating success
-      response.redirect("/view-course/" + request.body.courseId);
-    } catch (error) {
-      console.log(error);
-      return response.status(422).json(error);
-    }
-  },
-);
 
 app.get(
   "/view-course/:id/createchapter",
@@ -386,7 +395,57 @@ app.post(
         courseId,
       });
 
-      response.redirect("/view-course/:id/");
+      response.redirect("/view-course/" + courseId);
+    } catch (error) {
+      console.log(error);
+      return response.status(422).json(error);
+    }
+  },
+);
+
+app.get(
+  "/view-chapter/:id/createpage",
+  connnectEnsureLogin.ensureLoggedIn(),
+  async (req, res) => {
+    const chapterId = req.params.id;
+    const chapter = await Chapters.findByPk(chapterId);
+    const pages = await Pages.findAll({ where: { chapterId } });
+
+    res.render("createPage", {
+      title: "Create New Page",
+      chapterId,
+      chapter,
+      pages,
+    });
+  },
+);
+
+app.post(
+  "/view-chapter/:id/createpage",
+  connnectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    const chapter = await Chapters.findByPk(request.body.chapterId);
+    // Check if the page fields provided in the request body are not empty
+    if (request.body.pageName.length == 0) {
+      request.flash("error", "Page name cannot be empty!");
+      return response.redirect("/view-chapter/" + request.body.chapterId);
+    }
+
+    if (request.body.pageContent.length == 0) {
+      request.flash("error", "Page content cannot be empty!");
+      return response.redirect("/view-chapter/" + request.body.chapterId);
+    }
+
+    try {
+      // Create a new page and insert it into the database
+      await Pages.create({
+        title: request.body.pageName,
+        content: request.body.pageContent,
+        chapterId: request.body.chapterId,
+      });
+
+      // Redirect back to the chapter's view page
+      response.redirect("/view-course/" + chapter.courseId);
     } catch (error) {
       console.log(error);
       return response.status(422).json(error);

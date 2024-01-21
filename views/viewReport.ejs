@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add Tailwind CSS CDN or include your custom styles -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title><%= title %></title>
+</head>
+<body>
+    <div class="grid grid-cols-4">
+        <div class="col-start-2 col-span-2 p-4 bg-gray-100 rounded-lg shadow-lg">
+            <%- include ('header.ejs') %>
+            <h2 class="text-3xl font-semibold mb-6">View Reports</h2>
+            <a href="/teacher-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
+
+            <!-- Number of Courses Created -->
+            <div class="bg-white p-4 rounded-lg shadow mt-4 mb-2">
+                <p class="text-xl font-semibold">Total Courses Created: <strong><%= courses.length %></strong></p>
+            </div>
+
+            <!-- List of All Courses with Enrollment -->
+            <div class="mt-8">
+                <p class="text-2xl font-semibold">Courses with Enrollment:</p>
+                <ul class="space-y-4">
+                    <% courses.forEach(course => { %>
+                        <li>
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <p class="text-xl font-semibold">Course:</p>
+                                <p class="text-2xl font-bold"><%= course.courseName %></p>
+                                <p class="text-xl font-semibold">Students Enrolled:</p>
+                                <p class="text-2xl font-bold"><%= course.enrollmentCount %></p>
+                                <button
+                                    class="mt-4 px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                                    onclick="deleteCourse('<%= course.id %>')"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Function to Delete a Course -->
+    <script>
+        function deleteCourse(courseId) {
+            // Implement course deletion logic here (e.g., an AJAX request to the server).
+            // After successful deletion, you can refresh the page or update the list.
+        }
+    </script>
+</body>
+</html>

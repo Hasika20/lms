@@ -1,134 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title><%= title %></title>
-
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f3f3f3;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 400px;
-            width: 100%;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        h6 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        p {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #555;
-        }
-
-        a {
-            color: #3498db;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        form {
-            margin-top: 20px;
-        }
-
-        label {
-            font-size: 16px;
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        input {
-            width: calc(100% - 20px);
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            color: #333;
-            transition: border-color 0.3s ease;
-        }
-
-        input:focus {
-            border-color: #3498db;
-        }
-
-        button {
-            background-color: #3498db;
-            color: white;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #217dbb;
-        }
-
-        .error-message {
-            background-color: #e74c3c;
-            color: white;
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 5px;
-        }
-    </style>
+    <title> <%= title %></title>
 </head>
-
 <body>
-    <div class="container">
-        <%- include ('header.ejs') %>
-        <h6 class="py-4 text-xl mb-1">Hey User, Login here if you have an existing account!</h6>
-        <p class="py-2 text-lg mb-2">Don't have an account..? <a href="/signup" class="text-green-600 font-semibold hover:underline">Sign-up here</a></p>
-        <form action="/logging" method="post" autocomplete="on">
-            <div class="py-3">
-                <label for="email">Email: </label>
-                <input type="email" name="email" id="email" class="w-full">
-            </div>
-            <div class="py-3 relative">
-                <label for="password">Password: </label>
-                <input type="password" name="password" id="password" class="w-full">
-            </div>
-            <div class="py-3">
-                <button type="submit">Sign-In</button>
-            </div>
-        </form>
-        <% if(messages && messages.error && messages.error.length > 0)  { %>
-            <% for(var i=0; i<messages.error.length; i++) { %>
-                <p class="error-message"><%= messages.error[i] %></p>
-            <% } %>
-        <% } %>
+    <div class="grid grid-cols-4">
+        <div class="col-start-2 col-span-2">
+            <%- include ('header.ejs') %>
+            <h6 class="bg-blue-100 py-4 text-xl mb-1">Hey User! Login to your account</h6>
+            <p class="py-2 text-lg border-b-2 mb-2">Don't have an account? <a href="/signup" class="text-green-600 font-semibold hover:underline">Sign-up here</a></p>
+            <form action="/logging" method="post" autocomplete="on">
+                <div class="py-3">
+                    <label for="email">Email: </label>
+                    <input type="email" name="email" id="email" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
+                </div>
+                <div class="py-3 relative">
+                    <label for="password">Password: </label>
+                    <input type="password" name="password" id="password" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
+                </div>
+                <div class="py-3">
+                    <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded px-5 py-2">Sign-In</button>
+                </div>
+            </form>
+            <% if(messages && messages.error && messages.error.length > 0)  { %>
+                <% for(var i=0; i<messages.error.length; i++) { %>
+                  <p class="bg-red-300 my-4 list-none rounded border-gray-50 px-4 py-2"><%= messages.error[i] %></p>
+                <% } %>
+              <% } %>
+        </div>
     </div>
 </body>
-
 </html>

@@ -12,10 +12,10 @@
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2">
             <%- include ('header.ejs') %>
-            <h6 class="py-2 text-xl">Signup as a new User</h6>
-            <p class="py-2 text-lg border-b-2 mb-2">Already have an account? <a href="/login" class="text-green-600 font-semibold hover:underline">Sign-in</a></p>
+            <h6 class="bg-blue-100 py-2 text-xl">Signup as a new User</h6>
+            <p class="py-2 text-lg border-b-2 mb-1">Already have an account? <a href="/login" class="text-green-600 font-semibold hover:underline">Sign-in</a></p>
             <form action="/users" method="post" autocomplete="on">
-                <div class="py-3">
+                <div class="py-2">
                     <label for="role" class="text-gray-900 text-lg">Role:</label>
                     <select name="role" id="role" class="border border-gray-300 rounded p-2 w-full text-gray-900 text-lg">
                         <option value="null">Please select</option>
@@ -23,19 +23,19 @@
                         <option value="student">Student</option>
                     </select>
                 </div>
-                <div class="py-3">
+                <div class="py-2">
                     <label for="firstName">First Name: </label>
                     <input type="text" name="firstName" id="firstName" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
                 </div>
-                <div class="py-3">
+                <div class="py-2">
                     <label for="lastName">Last Name: </label>
                     <input type="text" name="lastName" id="lastName" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
                 </div>
-                <div class="py-3">
+                <div class="py-2">
                     <label for="email">Email: </label>
                     <input type="email" name="email" id="email" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
                 </div>
-                <div class="py-3">
+                <div class="py-2">
                     <label for="password">Password: </label>
                     <input type="password" name="password" id="password" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
                 </div>
