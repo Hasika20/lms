@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <link rel="stylesheet" href="./css/styles.css"/>
     <title><%= title %></title>
 </head>
@@ -22,17 +23,18 @@
             <% } else { %>
                 <a href="/teacher-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2 m-2">Back to Dashboard</a>
             <% } %>
-            <div class="bg-white p-4 m-4">
-                <h2 class="text-4xl font-semibold m-2 border-b-2 p-3 bg-blue-100"><strong><%= course.courseName %></strong></h2>
-                <p class="text-xl m-2 px-2"><strong>Course ID: <%= course.id %></strong></p>
-                <p class="text-xl m-2 px-2"><strong>Created By: </strong><%= userofCourse.firstName %> <%= userofCourse.lastName %></p>
-                <p class="text-xl m-2 px-2"><strong>Email: </strong><%= userofCourse.email %></p>
-                <p class="text-xl m-2 px-2"><strong>Description:</strong> <%= course.courseDescription %></p>
-                <p class="text-xl m-2 px-2">
+            <div class="bg-white m-4">
+                <h2 class="text-3xl font-semibold m-2 border-b-2 p-3 bg-blue-100"><strong><%= course.courseName %></strong></h2>
+                <!-- <p class="text-xl m-2 px-2"><strong>Course ID:</strong> <%= course.id %></p> -->
+                <p class="text-lg m-2 px-2"><strong>Created By: </strong><%= userofCourse.firstName %> <%= userofCourse.lastName %></p>
+                <p class="text-lg m-2 px-2"><strong>Created On:</strong> <%= course.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+                <p class="text-lg m-2 px-2"><strong>Email: </strong><%= userofCourse.email %></p>
+                <p class="text-lg m-2 px-2"><strong>Description:</strong> <%= course.courseDescription %></p>
+                <p class="text-lg m-2 px-2">
                     <b>Chapters:</b>
                     <% const isEnrolled = enrols.some(enrollment => enrollment.userId === currentUser.id && enrollment.courseId === course.id); %>
                     <% if(!isEnrolled && currentUser.role === "student") { %>
-                        <span class="text-lg font-semibold italic px-1 text-red-600 bg-green-200">Enrol to view content</span>
+                        <span class="text-lg font-semibold px-3 text-red-600 bg-green-300">Enrol to view content</span>
                     <% } %>
                     <!-- List of available chapters for this course -->
                     <ol class="list-decimal text-lg ml-10 mb-2">
@@ -49,9 +51,6 @@
                                     <% } else if (currentUser.role === "student") { %>
                                         <!-- Check if the student is enrolled -->
                                         <% if (isEnrolled) { %>
-                                            <!-- <a href="/view-chapter/<%= chapter.id %>/createpage?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
-                                                <%= chapter.chapterName %>
-                                            </a> -->
                                             <a href="/view-chapter/<%= chapter.id %>/viewpage?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
                                                 <%= chapter.chapterName %>
                                             </a>

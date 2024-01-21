@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="<%= csrfToken %>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./css/styles.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <title><%= title %></title>
 </head>
 <body>
@@ -24,7 +25,7 @@
             <!-- Available pages -->
             <ol class="space-y-4 list-decimal m-4">
                 <% if (pages.length === 0) { %>
-                    <h3 class="mb-5 text-2xl text-gray-600">---No pages available</h3>
+                    <h3 class="mb-5 text-xl text-gray-600">---No pages available</h3>
                 <% } else if (currentUser.role == "teacher"){ %>
                     <% for (let page of pages) { %>
                         <li class="mb-5">
@@ -39,19 +40,19 @@
                 <% } %>
             </ol>
             <% if(userOfCourse.id === currentUser.id) { %>
-                <h1 class="text-black-600 text-2xl font-semibold border-t-2 bg-green-100 border-b-2 py-2 mt-6 mb-2">Create a New Page</h1>
+                <h1 class="text-black-600 text-2xl font-semibold border-t-2 bg-green-100 border-b-2 px-2 py-2 mt-6 mb-2">Create a New Page</h1>
                 <form action="/view-chapter/<%= chapterId %>/createpage?currentUserId=<%= currentUser.id %>" method="post" autocomplete="on" class="m-3">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <input type="hidden" name="chapterId" value="<%= chapterId %>">
-                    <div class="py-4">
+                    <div class="py-3">
                         <label for="pageName" class="text-gray-900 text-lg">Page Title:</label>
                         <input type="text" name="pageName" id="pageName" class="border border-gray-300 rounded p-2 w-full text-gray-900 text-lg" required />
                     </div>
-                    <div class="py-4">
+                    <div class="py-3">
                         <label for="pageContent" class="text-gray-900 text-lg">Page Content:</label>
                         <textarea name="pageContent" id="pageContent" class="border border-gray-300 rounded p-2 w-full h-32 text-gray-900 text-lg" required></textarea>
                     </div>
-                    <div class="py-4">
+                    <div class="py-3">
                         <button type="submit" class="bg-green-600 text-white px-5 py-2 rounded font-medium hover:bg-green-700">Create Page</button>
                     </div>
                 </form>

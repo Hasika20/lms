@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="<%= csrfToken %>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <title><%= title %></title>
 </head>
 <body>
@@ -16,27 +17,31 @@
             <div class="py-2 text-sm font-semibold border-b-2" style="display: flex; justify-content: space-between;">
                 <h2 class="text-2xl font-semibold py-1">My Enrolled Courses:</h2>
                 <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> <br> <a href="/signout" class="text-green-600 text-lg font-semibold">Signout</a> </h1>
-            </div>
+            </div> 
             <a href="/student-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
-            <ul class="space-y-4">
-                <% for (let course of courses) { %>
-                    <li class="m-4">
-                        <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
-                            <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
-                                <div class="flex items-center justify-between">
-                                    <h2 class="text-xl font-semibold m-2"><%= course.courseName %></h2>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                    </svg>
+            <% if(courses.length === 0) { %>
+                <h2 class="bg-red-300 rounded font-semibold py-1 px-2 m-4">You have not enrolled in any courses.</h2>
+            <% } else { %>
+                <ul class="space-y-4">
+                    <% for (let course of courses) { %>
+                        <li class="m-4">
+                            <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
+                                <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
+                                    <div class="flex items-center justify-between">
+                                        <h2 class="text-xl font-semibold m-2"><%= course.courseName %></h2>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                    <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mx-2">
+                                        View Course
+                                    </a>
                                 </div>
-                                <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mx-2">
-                                    View Course
-                                </a>
-                            </div>
-                        </a>
-                    </li>
-                <% } %>
-            </ul>
+                            </a>
+                        </li>
+                    <% } %>
+                </ul>
+            <% } %>
         </div>
     </div>
 </body>

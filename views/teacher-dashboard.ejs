@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <title><%= title %></title>
 </head>
 <body>
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2">
             <%- include ('header.ejs') %>
-            <div class="py-4 flex flex-col m-3">
+            <div class="py-4 flex flex-col">
                 <div class="py-2 border-b-2 m-2" style="display: flex; justify-content: space-between;">
                     <h1 class="text-black-600 text-xl font-semibold">Welcome, <br> Educator: <%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
                     <a href="/signout" class="text-green-600 text-xl font-semibold ">Signout</a>
@@ -26,7 +27,7 @@
                         </a>
                     </div>
                     <div class="m-2">
-                        <a href="/my-courses" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
+                        <a href="/teaMyCourses" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
                             My Courses
                         </a>
                     </div>

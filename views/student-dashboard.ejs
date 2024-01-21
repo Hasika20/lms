@@ -7,13 +7,14 @@
     <meta name="csrf-token" content="<%= csrfToken %>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <title><%= title %></title>
 </head>
 <body>
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2">
             <%- include ('header.ejs') %>
-            <div class="py-4 flex flex-col ml-6 mr-6 mt-3">
+            <div class="py-4 flex flex-col">
                 <div class="py-2 border-b-2 m-2" style="display: flex; justify-content: space-between;">
                     <h1 class="text-black-600 text-xl font-semibold">Welcome, <br> Student: <%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
                     <a href="/signout" class="text-green-600 text-xl font-semibold">Signout</a>
@@ -26,8 +27,8 @@
                         Dive into a world of knowledge. Explore our diverse courses and embark on your journey to success.
                     </p>                
                 </div>
-                <div class="m-2 flex flex-row justify-evenly bg-yellow-100">
-                    <a href="/MyCourses" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
+                <div class="p-2 flex flex-row justify-evenly bg-yellow-100">
+                    <a href="/stuMyCourses" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
                         My Enrolled Courses
                     </a>
                     <a href="/changePassword" class="bg-red-600 text-white px-5 py-2 rounded font-medium hover:bg-red-700 text-center block">

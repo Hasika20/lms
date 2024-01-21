@@ -300,7 +300,7 @@ app.post(
 );
 
 app.get(
-  "/my-courses",
+  "/teaMyCourses",
   connnectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
     if (!request.isAuthenticated()) {
@@ -321,7 +321,7 @@ app.get(
       const userCourses = await currentUser.getCourses();
 
       // Render the my-courses page and pass the user's courses to it
-      response.render("my-courses", {
+      response.render("teaMyCourses", {
         title: `${currentUser.firstName}'s Courses`,
         courses: userCourses,
         currentUser,
@@ -408,7 +408,7 @@ app.get("/view-course/:id", async (request, response) => {
     // console.log(user)
     // Render the course details template and pass the course details and number of students enrolled to it
     response.render("course-details", {
-      title: "Course Details",
+      title: `${course.courseName} by ${userofCourse.firstName} ${userofCourse.lastName}`,
       course,
       chapters,
       userofCourse,
@@ -650,7 +650,7 @@ app.post(
 
 //route to display enrolled courses by the student
 app.get(
-  "/MyCourses",
+  "/stuMyCourses",
   connnectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
     const currentUser = request.user;
@@ -681,42 +681,47 @@ app.get(
   },
 );
 
+//mark page as complete
 app.post("/mark-as-complete", async (request, response) => {
   try {
-    const userId = request.query.currentUserId;
-    const courseId = request.query.currentCourseId;
-    var pageId = request.query.currentPageIndex;
-    const chapterId = request.query.currentChapterId;
+    const userId = request.body.userId;
+    const courseId = request.body.courseId;
+    const chapterId = request.body.chapterId;
+    var pageId = parseInt(request.body.pageId) + 1;
 
-    if (!pageId) {
-      pageId = 1;
-    }
+    // if (!pageId) {
+    //   pageId = 1;
+    // }
     // Check if there is an existing enrollment for this user and page
-    const existingEnrollment = await Enrollments.findOne({
-      where: {
-        userId,
-        courseId,
-        chapterId,
-        pageId,
-      },
-    });
+    // const existingEnrollment = await Enrollments.findOne({
+    //   where: {
+    //     userId,
+    //     courseId,
+    //     chapterId,
+    //     pageId,
+    //   },
+    // });
 
-    if (existingEnrollment) {
-      // Update the 'completed' status to true
-      existingEnrollment.chapterId = chapterId;
-      existingEnrollment.pageId = pageId;
-      existingEnrollment.completed = true;
-      await existingEnrollment.save();
-    } else {
-      // If no existing enrollment for that page, create a new one and set 'completed' to true
-      await Enrollments.create({
-        userId,
-        courseId,
-        chapterId,
-        pageId,
-        completed: true,
-      });
-    }
+    // if (existingEnrollment) {
+    //   // Update the 'completed' status to true
+    //   existingEnrollment.chapterId = chapterId;
+    //   existingEnrollment.pageId = pageId;
+    //   existingEnrollment.completed = true;
+    //   await existingEnrollment.save();
+    // } else {
+    // If no existing enrollment for that page, create a new one and set 'completed' to true
+    console.log(userId);
+    console.log(courseId);
+    console.log(chapterId);
+    console.log(pageId);
+    await Enrollments.create({
+      userId,
+      courseId,
+      chapterId,
+      pageId,
+      completed: true,
+    });
+    // }
 
     if (pageId === 1) {
       response.redirect(
@@ -724,7 +729,7 @@ app.post("/mark-as-complete", async (request, response) => {
       );
     } else {
       response.redirect(
-        `/view-chapter/${chapterId}/viewpage?currentUserId=${userId}&currentPageIndex=${pageId}`,
+        `/view-chapter/${chapterId}/viewpage?currentUserId=${userId}&currentPageIndex=${pageId - 1}`,
       );
     }
   } catch (error) {
