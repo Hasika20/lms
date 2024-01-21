@@ -17,9 +17,9 @@
                 <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
             </div>
             <% if (currentUser.role === "student") { %>
-                <a href="/student-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
+                <a href="/student-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2 m-2">Back to Dashboard</a>
             <% } else { %>
-                <a href="/teacher-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2">Back to Dashboard</a>
+                <a href="/teacher-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2 m-2">Back to Dashboard</a>
             <% } %>
             <div class="bg-white p-4 m-4">
                 <h2 class="text-4xl font-semibold m-2 border-b-2 p-3 bg-blue-100"><strong><%= course.courseName %></strong></h2>

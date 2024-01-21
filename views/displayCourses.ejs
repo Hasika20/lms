@@ -2,7 +2,7 @@
     <h2 class="text-2xl font-semibold py-1">Available Courses:</h2>
     <ul class="space-y-4">
         <% for (let course of courses) { %>
-        <a href="/view-course/<%= course.id %>">
+        <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
             <li>
                 <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
                     <div class="flex items-center justify-between">
@@ -17,13 +17,23 @@
                             <h3 class="text-lg font-semibold ml-3 mt-2 mb-3"> by <%= user.firstName %> <%= user.lastName %></h3>
                         <% } %>
                     <% } %>
-                    <!-- <p class="text-gray-600 my-2"><%= course.courseDescription %></p> -->
-                    <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mx-2">
-                        View Course
-                    </a>
-                    <a href="/enrol-course/<%= course.id %>" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 mx-2">
-                        Enrol
-                    </a>
+                    <!-- Check if the student is already enrolled in the course -->
+                    <% const isEnrolled = enrols.some(enrollment => enrollment.userId === currentUser.id && enrollment.courseId === course.id); %>
+                    <% if (isEnrolled) { %>
+                        <button class="bg-gray-700 text-white px-3 py-1 rounded mx-2" disabled>Enrolled</button>
+                    <% } else { %>
+                        <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mx-2">
+                            View Course
+                        </a>
+                        <form method="POST" action="/enrol-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" style="display: inline;">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <% if (currentUser.role === "student") { %>
+                                <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 mx-2">
+                                    Enrol
+                                </button>
+                            <% } %>
+                        </form>
+                    <% } %>
                 </div>
             </li>
         </a>

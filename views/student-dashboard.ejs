@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>">
-    <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <title><%= title %></title>
 </head>
@@ -22,12 +21,12 @@
                     <h1 class="text-xl font-bold text-blue-600 m-1">
                         🚀Unlock Your Potential: Your Learning Adventure Begins Here!
                     </h1>
-                    <p class="text-medium text-gray-700 m-2">
+                    <p class="text-medium text-gray-700 m-3">
                         Dive into a world of knowledge. Explore our diverse courses and embark on your journey to success.
                     </p>                
                 </div>
                 <div class="m-2">
-                    <a href="/my-courses" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
+                    <a href="/MyCourses" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 text-center block">
                         My Enrolled Courses
                     </a>
                 </div>
@@ -35,7 +34,7 @@
             </div>
             
             <!-- Display enrolled courses -->
-            <%- include ('displayCourses.ejs', { currentUser, courses, users }) %>
+            <%- include ('displayCourses.ejs', { currentUser, courses, users, enrols }) %>
 
             <% if(messages && messages.error && messages.error.length > 0)  { %>
                 <% for(var i=0; i<messages.error.length; i++) { %>
