@@ -1,8 +1,7 @@
-/*eslint-disable no-unused-vars*/
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Teachers extends Model {
+  class Users extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -10,22 +9,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Teachers.hasMany(models.Courses, {
-        foreignKey: "teacherId",
+      Users.hasMany(models.Courses, {
+        foreignKey: "userId",
       });
     }
   }
-  Teachers.init(
+  Users.init(
     {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
+      role: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: "Teachers",
+      modelName: "Users",
     },
   );
-  return Teachers;
+  return Users;
 };

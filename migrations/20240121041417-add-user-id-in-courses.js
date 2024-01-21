@@ -1,20 +1,18 @@
 /*eslint-disable no-unused-vars*/
 "use strict";
 
-const { query } = require("express");
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn("Courses", "teacherId", {
+    await queryInterface.addColumn("Courses", "userId", {
       type: Sequelize.DataTypes.INTEGER,
     });
 
     await queryInterface.addConstraint("Courses", {
-      fields: ["teacherId"],
+      fields: ["userId"],
       type: "foreign key",
       references: {
-        table: "Courses",
+        table: "Users",
         field: "id",
       },
     });
@@ -27,7 +25,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn("Courses", "teacherId");
+    await queryInterface.removeColumn("Courses", "userId");
     /**
      * Add reverting commands here.
      *

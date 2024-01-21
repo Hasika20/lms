@@ -12,9 +12,17 @@
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2">
             <%- include ('header.ejs') %>
-            <h6 class="py-2 text-xl">Signup as a new student</h6>
-            <p class="py-2 text-lg border-b-2 mb-2">Already have an account? <a href="/stulogin" class="text-green-600 font-semibold hover:underline">Sign-in</a></p>
-            <form action="/susers" method="post" autocomplete="on">
+            <h6 class="py-2 text-xl">Signup as a new User</h6>
+            <p class="py-2 text-lg border-b-2 mb-2">Already have an account? <a href="/login" class="text-green-600 font-semibold hover:underline">Sign-in</a></p>
+            <form action="/users" method="post" autocomplete="on">
+                <div class="py-3">
+                    <label for="role" class="text-gray-900 text-lg">Role:</label>
+                    <select name="role" id="role" class="border border-gray-300 rounded p-2 w-full text-gray-900 text-lg">
+                        <option value="null">Please select</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                    </select>
+                </div>
                 <div class="py-3">
                     <label for="firstName">First Name: </label>
                     <input type="text" name="firstName" id="firstName" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
