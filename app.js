@@ -25,7 +25,7 @@ app.use(flash());
 // Configure session middleware
 app.use(
   session({
-    secret: "my-super-secret-key-23487623476321414726",
+    secret: "my-super-secret-key-16201620162016201620",
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
     },
@@ -826,7 +826,9 @@ app.post("/mark-as-complete", async (request, response) => {
       );
     } else {
       response.redirect(
-        `/view-chapter/${chapterId}/viewpage?currentUserId=${userId}&currentPageIndex=${pageId - 1}`,
+        `/view-chapter/${chapterId}/viewpage?currentUserId=${userId}&currentPageIndex=${
+          pageId - 1
+        }`,
       );
     }
   } catch (error) {
@@ -900,7 +902,11 @@ app.post("/changePassword", async (request, response) => {
     await user.update({ password: hashedPwd });
 
     // Redirect to a success page or login page
-    return response.redirect("/login");
+    if (user.role === "teacher") {
+      return response.redirect("/teacher-dashboard");
+    } else if (user.role === "student") {
+      return response.redirect("/student-dashboard");
+    }
   } catch (error) {
     console.log(error);
     request.flash("error", "Error updating the password.");

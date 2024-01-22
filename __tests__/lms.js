@@ -82,6 +82,13 @@ describe("LMS test suite", () => {
     expect(studentDashboardRes.statusCode).toBe(200);
   });
 
+  test("should view teacher's report", async () => {
+    await login(agent, "teacher@example.com", "password123");
+
+    const teacherReportRes = await agent.get("/view-report");
+    expect(teacherReportRes.statusCode).toBe(200);
+  });
+
   test("should create a new course", async () => {
     await login(agent, "teacher@example.com", "password123");
 
@@ -97,7 +104,13 @@ describe("LMS test suite", () => {
   });
 
   test("should sign out the user", async () => {
-    let res = await agent.get("/signout");
+    res = await agent.get("/signout");
+    expect(res.statusCode).toBe(302);
+
+    res = await agent.get("/teacher-dashboard");
+    expect(res.statusCode).toBe(302);
+
+    res = await agent.get("/student-dashboard");
     expect(res.statusCode).toBe(302);
   });
 });

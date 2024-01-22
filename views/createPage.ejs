@@ -20,7 +20,8 @@
             </div>
             <h1 class="text-black-600 text-2xl font-semibold border-b-2 py-2 mb-2">
                 <strong>Course: </strong> <%= course.courseName %> <br>
-                <strong>Chapter: </strong> <%= chapter.chapterName %>
+                <strong>Chapter: </strong> <%= chapter.chapterName %> <br>
+                <strong>Description: </strong> <%= chapter.chapterDescription %> <br>
             </h1>
             <!-- Available pages -->
             <ol class="space-y-4 list-decimal m-4">
@@ -33,7 +34,7 @@
                                 <div class="flex items-center justify-between">
                                     <h2 class="text-2xl font-semibold m-2"><%= page.title %></h2>
                                 </div>
-                                <h3 class="text-xl m-2"><%= page.content %></h3>
+                                <h3 class="text-xl m-2 break-words"><%= page.content %></h3>
                             </div>
                         </li>
                     <% } %>
