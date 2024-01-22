@@ -53,7 +53,7 @@
                         <li>
                             <div class="bg-gray-200 p-4 rounded-lg shadow">
                                 <% if (course.enrollmentCount === courses[0].enrollmentCount && course.enrollmentCount != 0) { %>
-                                    <p class="text-lg italic text-green-600 font-semibold underline">Most Popular</p>
+                                    <p class="text-lg italic text-green-600 font-semibold underline">Most Popular by you</p>
                                 <% } %>
                                 <p class="text-xl font-bold flex justify-between"><%= course.courseName %></p>
                                 <p class="text-lg font-medium">Students Enrolled - <%= course.enrollmentCount %>

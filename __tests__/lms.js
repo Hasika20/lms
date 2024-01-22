@@ -33,7 +33,16 @@ describe("LMS test suite", () => {
     server.close();
   });
 
-  test("should sign up a new user", async () => {
+  test("Prevent access for unauthorized users", async () => {
+    // Send a GET request to the dashboard route without authentication
+    let response = await request(app).get("/teacher-dashboard");
+    expect(response.status).toBe(302);
+
+    response = await request(app).get("/teacher-dashboard");
+    expect(response.status).toBe(302);
+  });
+
+  test("Sign up a new user", async () => {
     const res = await agent.get("/signup");
     const csrfToken = extractCsrfToken(res);
 
@@ -50,46 +59,46 @@ describe("LMS test suite", () => {
     expect(signupRes.statusCode).toBe(302);
   });
 
-  test("should sign in a user", async () => {
+  test("Sign in a user", async () => {
     await login(agent, "john.doe@example.com", "password123");
   });
 
-  test("should view courses created by a teacher", async () => {
+  test("View courses created by a teacher", async () => {
     await login(agent, "teacher@example.com", "password123");
 
     const teaMyCoursesRes = await agent.get("/teaMyCourses");
     expect(teaMyCoursesRes.statusCode).toBe(200);
   });
 
-  test("should view enrolled courses for a student", async () => {
+  test("View enrolled courses for a student", async () => {
     await login(agent, "student@example.com", "password123");
 
     const stuMyCoursesRes = await agent.get("/stuMyCourses");
     expect(stuMyCoursesRes.statusCode).toBe(200);
   });
 
-  test("should view teacher's dashboard", async () => {
+  test("View teacher's dashboard", async () => {
     await login(agent, "teacher@example.com", "password123");
 
     const teacherDashboardRes = await agent.get("/teacher-dashboard");
     expect(teacherDashboardRes.statusCode).toBe(200);
   });
 
-  test("should view student's dashboard", async () => {
+  test("View student's dashboard", async () => {
     await login(agent, "student@example.com", "password123");
 
     const studentDashboardRes = await agent.get("/student-dashboard");
     expect(studentDashboardRes.statusCode).toBe(200);
   });
 
-  test("should view teacher's report", async () => {
+  test("View teacher's report", async () => {
     await login(agent, "teacher@example.com", "password123");
 
     const teacherReportRes = await agent.get("/view-report");
     expect(teacherReportRes.statusCode).toBe(200);
   });
 
-  test("should create a new course", async () => {
+  test("Create a new course", async () => {
     await login(agent, "teacher@example.com", "password123");
 
     const csrfToken = extractCsrfToken(await agent.get("/createcourse"));
@@ -103,7 +112,59 @@ describe("LMS test suite", () => {
     expect(createCourseRes.statusCode).toBe(302);
   });
 
-  test("should sign out the user", async () => {
+  test("Create a new chapter", async () => {
+    await login(agent, "teacher@example.com", "password123");
+
+    let csrfToken = extractCsrfToken(await agent.get("/createcourse"));
+
+    //create test course
+    const createdCourse = {
+      courseName: "Test Course",
+      courseDescription: "Description for the new course.",
+      _csrf: csrfToken,
+    };
+
+    await agent.post("/createcourse").send(createdCourse);
+
+    //create test chapter
+    csrfToken = extractCsrfToken(
+      await agent.get(`/view-course/${1}/createchapter?currentUserId=${1}`),
+    );
+    const newChapter = {
+      chapterName: "Test Chapter",
+      chapterDescription: "Description for the new chapter.",
+      _csrf: csrfToken,
+    };
+
+    // Send a request to create a chapter for the created course
+    const createChapterRes = await agent
+      .post(`/view-course/${createdCourse.id}/createchapter`)
+      .send(newChapter);
+
+    expect(createChapterRes.statusCode).toBe(302);
+  });
+
+  test("Change Password", async () => {
+    await login(agent, "student@example.com", "password123");
+
+    const csrfToken = extractCsrfToken(await agent.get("/changePassword"));
+
+    const newPassword = "newPass123";
+
+    const changePasswordResponse = await agent.post("/changePassword").send({
+      userEmail: "student@example.com",
+      newPassword: newPassword,
+      _csrf: csrfToken,
+    });
+
+    expect(changePasswordResponse.statusCode).toBe(302);
+    await login(agent, "student@example.com", newPassword);
+
+    const loginResponse = await agent.get("/student-dashboard");
+    expect(loginResponse.statusCode).toBe(200);
+  });
+
+  test("Sign out the user", async () => {
     res = await agent.get("/signout");
     expect(res.statusCode).toBe(302);
 
