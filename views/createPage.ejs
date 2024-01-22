@@ -9,6 +9,154 @@
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <title><%= title %></title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .col-start-2 {
+            grid-column-start: 2;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+        }
+
+        .font-semibold {
+            font-weight: bold;
+        }
+
+        .border-b-2 {
+            border-bottom-width: 2px;
+            border-bottom-style: solid;
+            border-bottom-color: #bdc3c7;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ol {
+            list-style-type: decimal;
+            margin: 1rem 0;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 1rem;
+        }
+
+        .bg-blue-100 {
+            background-color: #ebf8ff;
+        }
+
+        .border-blue-300 {
+            border-color: #bee3f8;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+        .shadow {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .hover\:shadow-lg:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .bg-green-100 {
+            background-color: #d1fae5;
+        }
+
+        .border-green-600 {
+            border-color: #10b981;
+        }
+
+        .border-t-2 {
+            border-top-width: 2px;
+            border-top-style: solid;
+        }
+
+        .border-b-2 {
+            border-bottom-width: 2px;
+            border-bottom-style: solid;
+            border-bottom-color: #bdc3c7;
+        }
+
+        .bg-green-600 {
+            background-color: #10b981;
+        }
+
+        .hover\:bg-green-700:hover {
+            background-color: #059669;
+        }
+
+        .text-white {
+            color: #fff;
+        }
+
+        .px-2 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .mt-6 {
+            margin-top: 1.5rem;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .m-3 {
+            margin: 0.75rem;
+        }
+
+        .bg-purple-100 {
+            background-color: #dcd6f7;
+        }
+
+        .border-purple-700 {
+            border-color: #7e5bef;
+        }
+
+        .hover\:bg-purple-700:hover {
+            background-color: #4d1d9c;
+        }
+    </style>
 </head>
 <body>
     <div class="grid grid-cols-4">

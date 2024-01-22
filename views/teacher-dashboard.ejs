@@ -10,6 +10,143 @@
     <link rel="stylesheet" href="./css/styles.css" />
     <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <title><%= title %></title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .col-start-2 {
+            grid-column-start: 2;
+        }
+
+        .flex-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        a {
+            color: #27ae60;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .border-b-2 {
+            border-bottom-width: 2px;
+            border-bottom-style: solid;
+            border-bottom-color: #bdc3c7;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mt-1 {
+            margin-top: 0.25rem;
+        }
+
+        .p-1 {
+            padding: 0.25rem;
+        }
+
+        .rounded-md {
+            border-radius: 0.375rem;
+        }
+
+        .course-card {
+            background-color: #fff;
+            border: 1px solid #bdc3c7;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .course-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .text-gray-500 {
+            color: #7f8c8d;
+        }
+
+        .text-gray-700 {
+            color: #2c3e50;
+        }
+
+        .text-gray-600 {
+            color: #34495e;
+        }
+
+        .bg-red-300 {
+            background-color: #e74c3c;
+        }
+
+        .my-4 {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .list-none {
+            list-style-type: none;
+        }
+
+        .border-gray-50 {
+            border-color: #f9fafb;
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .hover\:underline:hover {
+            text-decoration: underline;
+        }
+
+        .hover\:shadow-xl:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
     <div class="grid grid-cols-4">

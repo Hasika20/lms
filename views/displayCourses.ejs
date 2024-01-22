@@ -2,12 +2,12 @@
     <h2 class="text-2xl font-semibold py-1">Available Courses:</h2>
     <ul class="space-y-4">
         <% for (let course of courses) { %>
-        <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
+        <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="text-decoration-none">
             <li>
-                <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
+                <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg transition-all">
                     <div class="flex items-center justify-between">
                         <h2 class="text-2xl font-bold m-1"><%= course.courseName %></h2>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 hover:text-gray-700 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </div>
@@ -20,7 +20,7 @@
                     <!-- Check if the student is already enrolled in the course -->
                     <% const isEnrolled = enrols.some(enrollment => enrollment.userId === currentUser.id && enrollment.courseId === course.id); %>
                     <% if (isEnrolled) { %>
-                        <button class="bg-gray-700 text-white px-3 py-1 rounded mx-2" disabled>Enrolled</button>
+                        <button class="bg-gray-700 text-white px-3 py-1 rounded mx-2 cursor-not-allowed" disabled>Enrolled</button>
                     <% } else { %>
                         <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mx-2">
                             View Course
@@ -29,7 +29,7 @@
                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <% if (currentUser.role === "student") { %>
                                 <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 mx-2">
-                                    Enrol
+                                    Enroll
                                 </button>
                             <% } %>
                         </form>

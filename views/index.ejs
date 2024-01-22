@@ -1,24 +1,87 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="csrf-token" content="<%= csrfToken %>">
-    <title><%= title %></title>
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
-    <link rel="stylesheet" href="./css/styles.css" />
-  </head>
-  <body>
-    <%- include ('header.ejs') %>
-    <div class="login-container">
-      <div class="login-ask">
-        <h1>✍ Welcome to our Learning Platform!!! </h1>
-        <h4><i>Join our community of educators and learners to explore and enhance your skills!</i></h4>
-        <p>🚀 New to our platform? <a href="/signup">Sign-up here</a></p>
-        <p>🚀 Already part of our community? <a href="/login">Sign-in</a></p>
-        <%- include ('footer.ejs') %>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <title><%= title %></title>
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
+  <link rel="stylesheet" href="./css/styles.css" />
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 80vh;
+    }
+
+    .login-ask {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    h4 {
+      color: #555;
+      font-style: italic;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 20px;
+      background-color: #333;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <%- include ('header.ejs') %>
+  <div class="login-container">
+    <div class="login-ask">
+      <h1>Welcome to my LMS</h1>
+      <h4><i>Join our community of educators and learners to explore and improve your learning skills at ease!</i></h4>
+      <p>New to our platform..? <a href="/signup">Sign-up here</a></p>
+      <p>An existing member of the community..? <a href="/login">Sign-in</a></p>
+      <%- include ('footer.ejs') %>
     </div>
-  </body>
+  </div>
+</body>
 </html>

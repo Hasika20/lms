@@ -9,6 +9,131 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <link rel="stylesheet" href="./css/styles.css"/>
     <title><%= title %></title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .col-start-2 {
+            grid-column-start: 2;
+        }
+
+        .p-4 {
+            padding: 1rem;
+        }
+
+        .bg-white {
+            background-color: #fff;
+        }
+
+        .border-b-2 {
+            border-bottom-width: 2px;
+            border-bottom-style: solid;
+            border-bottom-color: #bdc3c7;
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+        }
+
+        .font-semibold {
+            font-weight: bold;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .text-black-600 {
+            color: #2c3e50;
+        }
+
+        .text-green-600 {
+            color: #38a169;
+        }
+
+        .text-blue-600 {
+            color: #3498db;
+        }
+
+        .hover\:text-blue-800:hover {
+            color: #2c3e50;
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+        }
+
+        .text-red-600 {
+            color: #e53e3e;
+        }
+
+        .bg-green-300 {
+            background-color: #6ee7b7;
+        }
+
+        .ml-10 {
+            margin-left: 2.5rem;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .hover\:underline:hover {
+            text-decoration: underline;
+        }
+
+        .bg-blue-600 {
+            background-color: #3498db;
+        }
+
+        .hover\:bg-blue-700:hover {
+            background-color: #2980b9;
+        }
+
+        .text-white {
+            color: #fff;
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .rounded {
+            border-radius: 0.25rem;
+        }
+
+        .font-xl {
+            font-size: 1.25rem;
+        }
+
+        .hover\:bg-red-600:hover {
+            background-color: #e53e3e;
+        }
+
+        .ml-5 {
+            margin-left: 1.25rem;
+        }
+    </style>
 </head>
 <body>
     <div class="grid grid-cols-4">
@@ -34,7 +159,7 @@
                     <b>Chapters:</b>
                     <% const isEnrolled = enrols.some(enrollment => enrollment.userId === currentUser.id && enrollment.courseId === course.id); %>
                     <% if(!isEnrolled && currentUser.role === "student") { %>
-                        <span class="text-lg font-semibold px-3 text-red-600 bg-green-300">Enrol to view content</span>
+                        <span class="text-lg font-semibold px-3 text-red-600 bg-green-300">Enroll to view content</span>
                     <% } %>
                     <!-- List of available chapters for this course -->
                     <ol class="list-decimal text-lg ml-10 mb-2">
