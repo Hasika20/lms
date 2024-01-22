@@ -205,6 +205,43 @@ app.post(
   },
 );
 
+//forget password
+app.get("/resetpassword", (request, reponse) => {
+  reponse.render("resetPassword", {
+    title: "Reset Password",
+    csrfToken: request.csrfToken(),
+  });
+});
+
+// Route for updating the password
+app.post("/resetpassword", async (request, response) => {
+  const userEmail = request.body.email;
+  const newPassword = request.body.password;
+
+  try {
+    // Find the user by email
+    const user = await Users.findOne({ where: { email: userEmail } });
+
+    if (!user) {
+      request.flash("error", "User with that email does not exist.");
+      return response.redirect("/resetpassword");
+    }
+
+    // Hash the new password
+    const hashedPwd = await bcrypt.hash(newPassword, saltRounds);
+
+    // Update the user's password in the database
+    await user.update({ password: hashedPwd });
+
+    // Redirect to a success page or login page
+    return response.redirect("/login");
+  } catch (error) {
+    console.log(error);
+    request.flash("error", "Error updating the password.");
+    return response.redirect("/resetpassword");
+  }
+});
+
 app.get(
   "/teacher-dashboard",
   connnectEnsureLogin.ensureLoggedIn(),
@@ -378,10 +415,39 @@ app.get(
         (a, b) => b.enrollmentCount - a.enrollmentCount,
       );
 
+      const allCourses = await Courses.findAll();
+
+      // Loop through each course to fetch enrollment count
+      const allCoursesWithEnrollment = [];
+      for (const course of allCourses) {
+        const enrollmentCount = await Enrollments.count({
+          where: { courseId: course.id },
+          distinct: true,
+          col: "userId",
+        });
+
+        const userId = course.userId;
+        const userOfCourse = await Users.findByPk(userId);
+
+        allCoursesWithEnrollment.push({
+          id: course.id,
+          userFName: userOfCourse.firstName,
+          userLName: userOfCourse.lastName,
+          courseName: course.courseName,
+          enrollmentCount: enrollmentCount,
+        });
+      }
+
+      // Sort all courses based on enrollment count in descending order for popularity
+      const sortedAllCourses = allCoursesWithEnrollment.sort(
+        (a, b) => b.enrollmentCount - a.enrollmentCount,
+      );
+
       // Render the viewReport page and pass the user's courses with enrollment count
       response.render("viewReport", {
         title: `${currentUser.firstName}'s Courses Report`,
         courses: sortedCourses,
+        allCourses: sortedAllCourses,
         currentUser,
         csrfToken: request.csrfToken(),
       });
@@ -681,34 +747,37 @@ app.get(
           ],
         });
 
-        // Check if the course is already in the array
-        const existingCourse = coursesWithPageInfo.find(
-          (c) => c.courseId === course.id,
-        );
-
-        if (!existingCourse) {
-          // Calculate the total number of pages for the course
-          const totalPages = course.Chapters.reduce(
-            (total, chapter) => total + chapter.Pages.length,
-            0,
+        // Check if the course is retrieved
+        if (course) {
+          // Check if the course is already in the array
+          const existingCourse = coursesWithPageInfo.find(
+            (c) => c.courseId === course.id,
           );
 
-          // Fetch the count of completed pages for the user in this course
-          const donePagesCount = await Enrollments.count({
-            where: {
-              courseId: course.id,
-              userId: currentUser.id,
-              completed: true,
-            },
-          });
+          if (!existingCourse) {
+            // Calculate the total number of pages for the course
+            const totalPages = course.Chapters.reduce(
+              (total, chapter) => total + chapter.Pages.length,
+              0,
+            );
 
-          coursesWithPageInfo.push({
-            userId: course.userId,
-            courseId: course.id,
-            courseName: course.courseName,
-            donePagesCount: donePagesCount,
-            totalPages: totalPages,
-          });
+            // Fetch the count of completed pages for the user in this course
+            const donePagesCount = await Enrollments.count({
+              where: {
+                courseId: course.id,
+                userId: currentUser.id,
+                completed: true,
+              },
+            });
+
+            coursesWithPageInfo.push({
+              userId: course.userId,
+              courseId: course.id,
+              courseName: course.courseName,
+              donePagesCount: donePagesCount,
+              totalPages: totalPages,
+            });
+          }
         }
       }
 
@@ -774,11 +843,24 @@ app.delete(
   connnectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
     const courseId = request.params.id;
+
     console.log("We have to delete a course with ID: ", courseId);
 
     try {
-      // Assuming Courses.remove is a method that deletes a course
-      const status = await Courses.remove(courseId, request.user.id);
+      // Find all chapters associated with the course
+      const chapters = await Chapters.findAll({ where: { courseId } });
+
+      // Delete all pages associated with the chapters
+      for (const chapter of chapters) {
+        await Pages.destroy({ where: { chapterId: chapter.id } });
+      }
+
+      // Delete all chapters associated with the course
+      await Chapters.destroy({ where: { courseId } });
+
+      // Delete the course
+      const status = await Courses.remove(courseId);
+
       return response.json(status ? true : false);
     } catch (err) {
       console.error(err);
