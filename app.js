@@ -108,7 +108,7 @@ app.get("/", (request, response) => {
     }
   }
   response.render("index", {
-    title: "LMS app",
+    title: "LMS",
     csrfToken: request.csrfToken(),
   });
 });
