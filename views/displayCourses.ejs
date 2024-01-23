@@ -1,42 +1,129 @@
-<div class="py-4">
-    <h2 class="text-2xl font-semibold py-1">Available Courses:</h2>
-    <ul class="space-y-4">
-        <% for (let course of courses) { %>
-        <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="text-decoration-none">
-            <li>
-                <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg transition-all">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-2xl font-bold m-1"><%= course.courseName %></h2>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 hover:text-gray-700 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </div>
-                    <!-- find courseOwner and display his name -->
-                    <% for(let user of users) { %>
-                        <% if(user.id === course.userId) { %>
-                            <h3 class="text-lg font-semibold ml-3 mt-2 mb-3"> by <%= user.firstName %> <%= user.lastName %></h3>
-                        <% } %>
-                    <% } %>
-                    <!-- Check if the student is already enrolled in the course -->
-                    <% const isEnrolled = enrols.some(enrollment => enrollment.userId === currentUser.id && enrollment.courseId === course.id); %>
-                    <% if (isEnrolled) { %>
-                        <button class="bg-gray-700 text-white px-3 py-1 rounded mx-2 cursor-not-allowed" disabled>Enrolled</button>
-                    <% } else { %>
-                        <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mx-2">
-                            View Course
-                        </a>
-                        <form method="POST" action="/enrol-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" style="display: inline;">
-                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                            <% if (currentUser.role === "student") { %>
-                                <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 mx-2">
-                                    Enroll
-                                </button>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title><%= title %></title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .course-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .course-item {
+            background-color: #fff;
+            border: 1px solid #d1d5db;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .course-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .course-author {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #6b7280;
+        }
+
+        .enroll-button,
+        .view-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .view-button {
+            background-color: #3498db;
+            color: #fff;
+            margin-right: 0.5rem;
+        }
+
+        .view-button:hover {
+            background-color: #2980b9;
+        }
+
+        .enroll-button {
+            background-color: #27ae60;
+            color: #fff;
+        }
+
+        .enroll-button:hover {
+            background-color: #219653;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="py-4">
+            <h2 class="text-2xl font-semibold py-1">Available Courses:</h2>
+            <ul class="course-list">
+                <% for (let course of courses) { %>
+                    <li class="course-item">
+                        <h2 class="course-title"><%= course.courseName %></h2>
+                        <% for(let user of users) { %>
+                            <% if(user.id === course.userId) { %>
+                                <p class="course-author">by <%= user.firstName %> <%= user.lastName %></p>
                             <% } %>
-                        </form>
-                    <% } %>
-                </div>
-            </li>
-        </a>
-        <% } %>
-    </ul>
-</div>
+                        <% } %>
+                        <% const isEnrolled = enrols.some(enrollment => enrollment.userId === currentUser.id && enrollment.courseId === course.id); %>
+                        <% if (isEnrolled) { %>
+                            <button class="enroll-button" disabled>Enrolled</button>
+                        <% } else { %>
+                            <a href="/view-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="view-button">View Course</a>
+                            <form method="POST" action="/enrol-course/<%= course.id %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" style="display: inline;">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <% if (currentUser.role === "student") { %>
+                                    <button type="submit" class="enroll-button">Enroll</button>
+                                <% } %>
+                            </form>
+                        <% } %>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

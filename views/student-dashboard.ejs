@@ -1,84 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./css/styles.css" />
-    <link rel="stylesheet" href="./css/styles.css" />
     <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <title><%= title %></title>
     <style>
-        /* Specific styles for this page */
-        .flex-col {
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .col-start-2 {
+            grid-column-start: 2;
+        }
+
+        .dashboard-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .user-info h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .user-info p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .signout-link {
+            font-size: 1.2rem;
+            color: #2ecc71;
+            text-decoration: none;
+        }
+
+        .signout-link:hover {
+            text-decoration: underline;
+        }
+
+        .dashboard-message {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-top: 20px;
+        }
+
+        .cta-section {
+            background-color: #fff8dc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .cta-section h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .cta-section p {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .btn-group {
             display: flex;
             flex-direction: column;
-        }
-
-        .p-2 {
-            padding: 1rem;
-        }
-
-        .bg-yellow-100 {
-            background-color: #fff8dc;
+            gap: 10px;
         }
 
         .btn-group a {
             display: block;
             width: 100%;
             text-align: center;
-            margin-bottom: 0.5rem;
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
         }
 
         .btn-group a:hover {
-            text-decoration: underline;
+            background-color: #1e3a8a;
         }
-    </style>    
+
+        .error-message {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
+
 <body>
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2">
             <%- include ('header.ejs') %>
-            <div class="py-4 flex flex-col">
-                <div class="py-2 border-b-2 m-2" style="display: flex; justify-content: space-between;">
-                    <h1 class="text-black-600 text-xl font-semibold">Welcome, <br> Student: <%= currentUser.firstName %> <%= currentUser.lastName %> </h1>
-                    <a href="/signout" class="text-green-600 text-xl font-semibold">Signout</a>
-                </div>
-                <div class="border-b-2 m-1">
-                    <h1 class="text-xl font-bold text-blue-600 m-1">
-                        🚀Unleash Your Potential here!!!
-                    </h1>
-                    <p class="text-medium text-gray-700 m-3">
-                        Dive into a world of knowledge. Explore our diverse courses and embark on your journey to success.
-                    </p>                
-                </div>
-                <div class="p-2 flex flex-col bg-yellow-100 btn-group">
-                    <a href="/stuMyCourses" class="bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700">
-                        Enrolled Courses
-                    </a>
-                    <a href="/changePassword" class="bg-red-600 text-white px-5 py-2 rounded font-medium hover:bg-red-700">
-                        Change Password
-                    </a>
-                </div>
-                <hr class="m-3">
-            </div>
-            
-            <div id="courseContainer" class="space-y-4">
-                <!-- ... your course content ... -->
-            </div>
 
-            <!-- Display enrolled courses -->
-            <%- include ('displayCourses.ejs', { currentUser, courses, users, enrols }) %>
+            <div class="dashboard-container">
+                <div class="user-header">
+                    <div class="user-info">
+                        <h1>Welcome, <br> Student: <%= currentUser.firstName %> <%= currentUser.lastName %></h1>
+                        <p>Embark on a captivating journey through the vast realm of knowledge, where our diverse courses serve as stepping stones for your continuous growth and success in the Learning Management System</p>
+                    </div>
+                    <a href="/signout" class="signout-link">Signout</a>
+                </div>
 
-            <% if(messages && messages.error && messages.error.length > 0)  { %>
-                <% for(var i=0; i<messages.error.length; i++) { %>
-                    <p class="bg-red-300 my-4 list-none rounded border-gray-50 px-4 py-2"><%= messages.error[i] %></p>
+                <div class="dashboard-message">
+                    🌟 Ignite your capabilities and excel to new heights!
+                </div>
+
+                <div class="cta-section">
+                    <h1>Explore Your Options here!</h1>
+
+                    <div class="btn-group">
+                        <a href="/stuMyCourses" class="btn">
+                            Enrolled Courses
+                        </a>
+                        <a href="/changePassword" class="btn">
+                            Change Password
+                        </a>
+                    </div>
+                </div>
+
+                <hr class="my-3">
+
+                <!-- Display enrolled courses -->
+                <%- include ('displayCourses.ejs', { currentUser, courses, users, enrols }) %>
+
+                <% if(messages && messages.error && messages.error.length > 0)  { %>
+                    <% for(var i=0; i<messages.error.length; i++) { %>
+                        <p class="error-message"><%= messages.error[i] %></p>
+                    <% } %>
                 <% } %>
-            <% } %>
+            </div>
         </div>
     </div>
+
     <script>
         function filterCourses() {
             const searchInput = document.getElementById('search').value.toLowerCase();
@@ -95,9 +195,10 @@
                 }
             });
         }
-    
+
         // Attach the function to the input's "input" event
         document.getElementById('search').addEventListener('input', filterCourses);
     </script>
 </body>
+
 </html>

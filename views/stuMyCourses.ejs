@@ -1,24 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="./css/styles.css" />
     <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <title><%= title %></title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .col-start-2 {
+            grid-column-start: 2;
+        }
+
+        .header {
+            border-b-2 border-gray-300 py-2 flex justify-between items-center text-sm font-semibold">
+            <h2 class="text-2xl font-semibold py-1">My Enrolled Courses:</h2>
+            <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> <br> <a href="/signout" class="text-green-600 text-lg font-semibold">Signout</a> </h1>
+            </div>
+        </div>
+    </style>
 </head>
+
 <body class="bg-gray-100">
     <div class="grid grid-cols-4">
         <div class="col-start-2 col-span-2">
-            <%- include ('header.ejs') %>
-            <div class="py-2 text-sm font-semibold border-b-2 flex justify-between items-center">
-                <h2 class="text-2xl font-semibold py-1">My Enrolled Courses:</h2>
-                <h1 class="text-black-600 text-sm font-semibold"><%= currentUser.firstName %> <%= currentUser.lastName %> <br> <a href="/signout" class="text-green-600 text-lg font-semibold">Signout</a> </h1>
-            </div> 
+            <div class="header">
+                <%- include ('header.ejs') %>
+            </div>
+
             <a href="/student-dashboard" class="text-blue-600 text-sm font-semibold border-b-2 py-2 block hover:underline">Back to Dashboard</a>
+
             <% if(courses.length === 0) { %>
                 <div class="bg-red-300 rounded font-semibold py-1 px-2 m-4">You have not enrolled in any courses.</div>
             <% } else { %>
@@ -26,14 +56,14 @@
                     <% for (let course of courses) { %>
                         <li class="m-4">
                             <a href="/view-course/<%= course.courseId %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>">
-                                <div class="bg-white border border-gray-300 p-4 rounded-lg shadow hover:shadow-lg">
-                                    <div class="flex items-center justify-between">
-                                        <h2 class="text-2xl font-bold m-1">
+                                <div class="course-card">
+                                    <div class="course-header flex items-center justify-between">
+                                        <h2 class="course-title text-2xl font-bold m-1">
                                             <%= course.courseName %> 
-                                            <span class="text-green-600 text-xl block">
+                                            <span class="course-progress text-green-600 text-xl block">
                                                 <%= ((course.donePagesCount / course.totalPages) * 100).toFixed(2) %>% Complete
                                             </span>
-                                            <span class="flex flex-row text-lg">
+                                            <span class="course-details flex flex-row text-lg">
                                                 Completed: <%= course.donePagesCount %> pages<br>
                                                 Total: <%= course.totalPages %> pages<br>
                                             </span>
@@ -45,10 +75,10 @@
                                     <!-- find courseOwner and display his name -->
                                     <% for(let user of users) { %>
                                         <% if(user.id === course.userId) { %>
-                                            <h3 class="text-lg font-medium m-1"> by <%= user.firstName %> <%= user.lastName %></h3>
+                                            <h3 class="instructor-name text-lg font-medium m-1"> by <%= user.firstName %> <%= user.lastName %></h3>
                                         <% } %>
                                     <% } %>
-                                    <a href="/view-course/<%= course.courseId %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="bg-blue-600 text-white text-center px-3 py-1 rounded hover:bg-blue-700 mt-2 block">
+                                    <a href="/view-course/<%= course.courseId %>?currentUserId=<%= encodeURIComponent(currentUser.id) %>" class="view-course-btn bg-blue-600 text-white text-center px-3 py-1 rounded hover:bg-blue-700 mt-2 block">
                                         View Course
                                     </a>
                                 </div>
@@ -60,4 +90,5 @@
         </div>
     </div>
 </body>
+
 </html>

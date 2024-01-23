@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>">
+    <link rel="stylesheet" href="https://cdn.tailwindcss.com">
     <link rel="stylesheet" href="./css/styles.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./css/styles.css" />
     <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-books-doodle-favicons/Web/icons8-books-doodle-16.png">
     <title><%= title %></title>
     <style>
@@ -18,131 +18,119 @@
             padding: 0;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
-        .col-start-2 {
-            grid-column-start: 2;
-        }
-
-        form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        h6 {
-            background-color: #3498db;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
+        .header {
             text-align: center;
-            font-size: 1.5rem;
-            margin-top: 20px;
+            margin-bottom: 30px;
         }
 
-        p {
-            font-size: 1rem;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        a {
-            color: #2ecc71;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         label {
-            display: block;
-            margin-bottom: 5px;
+            font-size: 16px;
             font-weight: bold;
+            margin-bottom: 8px;
         }
 
-        select,
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
+        input,
+        select {
+            padding: 12px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 1rem;
+            font-size: 16px;
+            width: 100%;
         }
 
         button {
-            background-color: #2ecc71;
+            background-color: #3498db;
             color: white;
-            padding: 10px 20px;
+            padding: 14px;
             border: none;
             border-radius: 5px;
-            font-size: 1.2rem;
+            font-size: 18px;
             cursor: pointer;
         }
 
         button:hover {
-            background-color: #27ae60;
+            background-color: #2980b9;
         }
 
         .error-message {
             background-color: #e74c3c;
             color: white;
-            padding: 10px;
+            padding: 12px;
             border-radius: 5px;
             margin-top: 10px;
+            text-align: center;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border-radius: 8px;
         }
     </style>
 </head>
+
 <body>
-    <div class="grid grid-cols-4">
-        <div class="col-start-2 col-span-2">
-            <%- include ('header.ejs') %>
-            <h6 class="bg-blue-100 py-2 text-xl">Signup here as a new User</h6>
-            <p class="py-2 text-lg border-b-2 mb-1">Already have an account..? <a href="/login" class="text-green-600 font-semibold hover:underline">Sign-in</a></p>
+    <div class="container">
+        <div class="header">
+            <%- include('header.ejs') %>
+            <h2 class="text-3xl font-bold mb-4">Signup as here if you're a New User</h2>
+        </div>
+
+        <div class="form-container" style="margin-top: 20px;">
             <form action="/users" method="post" autocomplete="on">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <div class="py-2">
-                    <label for="role" class="text-gray-900 text-lg">Role:</label>
-                    <select name="role" id="role" class="border border-gray-300 rounded p-2 w-full text-gray-900 text-lg">
-                        <option value="null">Select</option>
-                        <option value="teacher">Teacher</option>
-                        <option value="student">Student</option>
-                    </select>
-                </div>
-                <div class="py-2">
-                    <label for="firstName">First Name: </label>
-                    <input type="text" name="firstName" id="firstName" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
-                </div>
-                <div class="py-2">
-                    <label for="lastName">Last Name: </label>
-                    <input type="text" name="lastName" id="lastName" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
-                </div>
-                <div class="py-2">
-                    <label for="email">Email: </label>
-                    <input type="email" name="email" id="email" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
-                </div>
-                <div class="py-2">
-                    <label for="password">Password: </label>
-                    <input type="password" name="password" id="password" class="border border-gray-300 text-gray-900 rounded p-2 w-full">
-                </div>
-                <div class="py-3">
-                    <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded px-5 py-2">Sign-up</button>
-                </div>
+
+                <label for="role">Role:</label>
+                <select name="role" id="role">
+                    <option value="null">Choose:</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="student">Student</option>
+                </select>
+
+                <label for="firstName">First Name:</label>
+                <input type="text" name="firstName" id="firstName" placeholder=" for eg: Hasika">
+
+                <label for="lastName">Last Name:</label>
+                <input type="text" name="lastName" id="lastName" placeholder="for eg: Cuddapah">
+
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" placeholder="for eg: abc@example.com">
+
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" placeholder="for eg: Minimum of 8 letters">
+
+                <button type="submit" style="margin-top: 20px;">Sign-up</button>
             </form>
-            <% if(messages && messages.error && messages.error.length > 0)  { %>
-                <% for(var i=0; i<messages.error.length; i++) { %>
-                  <p class="error-message"><%= messages.error[i] %></p>
+
+            <% if (messages && messages.error && messages.error.length > 0) { %>
+                <% for (var i = 0; i < messages.error.length; i++) { %>
+                    <p class="error-message"><%= messages.error[i] %></p>
                 <% } %>
-              <% } %>
+            <% } %>
         </div>
     </div>
+
+    <div class="footer">
+        <%- include('footer.ejs') %>
+    </div>
 </body>
+
 </html>

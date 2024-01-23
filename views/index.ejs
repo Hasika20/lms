@@ -12,76 +12,71 @@
       font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
-    }
-
-    header {
-      background-color: #333;
-      color: white;
-      padding: 10px;
-      text-align: center;
-    }
-
-    .login-container {
+      background-color: #94ecec; /* Blue background color */
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 80vh;
+      min-height: 100vh;
     }
 
-    .login-ask {
+    .login-card {
       background-color: white;
-      padding: 20px;
+      padding: 30px;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
       text-align: center;
+      width: 80%;
+      max-width: 400px;
     }
 
     h1 {
       color: #333;
+      margin-bottom: 20px;
     }
 
     h4 {
       color: #555;
       font-style: italic;
+      margin-bottom: 20px;
     }
 
     p {
       margin: 10px 0;
     }
 
-    a {
+    .auth-links a {
       color: #007bff;
       text-decoration: none;
       font-weight: bold;
     }
 
-    a:hover {
+    .auth-links a:hover {
       text-decoration: underline;
     }
 
     footer {
-      margin-top: 20px;
       background-color: #333;
       color: white;
-      padding: 10px;
+      padding: 20px;
       text-align: center;
-      position: relative;
-      bottom: 0;
+      margin-top: 20px;
       width: 100%;
     }
   </style>
 </head>
 <body>
-  <%- include ('header.ejs') %>
-  <div class="login-container">
-    <div class="login-ask">
-      <h1>Welcome to my LMS</h1>
-      <h4><i>Join our community of educators and learners to explore and improve your learning skills at ease!</i></h4>
-      <p>New to our platform..? <a href="/signup">Sign-up here</a></p>
-      <p>An existing member of the community..? <a href="/login">Sign-in</a></p>
-      <%- include ('footer.ejs') %>
-    </div>
+  <header>
+    <%- include ('header.ejs') %>
+  </header>
+  <div class="login-card">
+    <h1>Welcome to my LMS</h1>
+    <h4><i>Join our community of educators and learners to explore and improve your learning skills at ease!</i></h4>
+    <p>New to our platform? <a href="/signup">Sign-up here</a></p>
+    <p>An existing member of the community? <a href="/login">Sign-in</a></p>
   </div>
+
+  <footer>
+    <%- include ('footer.ejs') %>
+  </footer>
 </body>
 </html>
