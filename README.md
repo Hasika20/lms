@@ -12,24 +12,24 @@ Welcome to my **_Learning Management System (LMS)_** meticulously crafted on the
   - `node index.js`
 ## LMS OVERVIEW:
 #### LMS Page:
-![Screenshot of the LMS page](https://github.com/Hasika20/lms/blob/main/public/images/Screenshot%202024-01-24%20195041.png)
+![Screenshot of the LMS page](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20195041.png)
 #### Sign-Up Page:
-![Screenshot of the Sign-Up Page](https://github.com/Hasika20/lms/blob/main/public/images/Screenshot%202024-01-24%20200557.png)
+![Screenshot of the Sign-Up Page](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20200557.png)
 #### Sign-In Page:
-![Screenshot of the Sign-In Page](https://github.com/Hasika20/lms/blob/main/public/images/Screenshot%202024-01-24%20200618.png)
+![Screenshot of the Sign-In Page](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20200618.png)
 #### Teacher's Dashboard:
-![Screenshot of Teacher's Dashboard](https://github.com/Hasika20/lms/blob/main/public/images/Screenshot%202024-01-24%20211542.png)
-![Continuation of Teacher's Dashboard](https://github.com/Hasika20/lms/blob/main/public/images/Screenshot%202024-01-24%20211600.png)
+![Screenshot of Teacher's Dashboard](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20211542.png)
+![Continuation of Teacher's Dashboard](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20211600.png)
 #### Course Details Page:
-![Screenshot of course-details page](https://github.com/Hasika20/lms/blob/main/public/images/Screenshot%202024-01-24%20212028.png)
+![Screenshot of course-details page](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20212028.png)
 #### Teacher's Report page:
-![Screenshot of view reports page](https://github.com/Hasika20/lms/blob/main/public/images/Screenshot%202024-01-24%20212224.png)
+![Screenshot of view reports page](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20212224.png)
 #### Student's Dashboard:
-![Screenshot of Student's Dashboard](https://github.com/Hasika20/lms/blob/main/public/images/Screenshot%202024-01-24%20213054.png)
+![Screenshot of Student's Dashboard](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20213054.png)
 #### Student enrolled courses page:
-![Screenshot of student courses page](https://github.com/Hasika20/lms/blob/main/public/images/Screenshot%202024-01-24%20213112.png)
+![Screenshot of student courses page](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20213112.png)
 #### Reset password page:
-![Reset password page](https://github.com/Hasika20/lms/blob/main/public/images/Screenshot%202024-01-24%20213123.png)
+![Reset password page](https://github.com/Hasika20/lms/blob/main/publics/Screenshot%202024-01-24%20213123.png)
 ### Some basic git commands usesful :
 ```
 git status
