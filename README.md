@@ -29,7 +29,7 @@ Welcome to my **_Learning Management System (LMS)_** meticulously crafted on the
 #### Student enrolled courses page:
 ![Screenshot of student courses page](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20213112.png)
 #### Reset password page:
-![Reset password page](https://github.com/Hasika20/lms/blob/main/publics/Screenshot%202024-01-24%20213123.png)
+![Reset password page](https://github.com/Hasika20/lms/blob/main/public/Screenshot%202024-01-24%20213123.png)
 ### Some basic git commands usesful :
 ```
 git status
